@@ -220,10 +220,10 @@ p {
     left: 0;
     right: 0;
     z-index: 998;
-    padding: 0.5rem 2rem;
-    background: rgba(0, 0, 0, 0.85);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 0.6rem 2rem;
+    background: rgba(0, 0, 0, 0.92);
+    backdrop-filter: blur(15px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     animation: slideDown 0.3s ease-out;
 }
 
@@ -241,11 +241,11 @@ p {
 .plan-info-card {
     max-width: 900px;
     margin: 0 auto;
-    background: rgba(255, 255, 255, 0.03);
+    background: rgba(255, 255, 255, 0.06);
     border: none;
     border-radius: 0;
-    padding: 0.4rem 0;
-    backdrop-filter: blur(5px);
+    padding: 0.5rem 0;
+    backdrop-filter: blur(8px);
     box-shadow: none;
     position: relative;
     overflow: visible;
@@ -272,9 +272,9 @@ p {
 }
 
 .plan-simple-text {
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 0.85rem;
-    font-weight: 400;
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 0.9rem;
+    font-weight: 500;
     letter-spacing: 0.2px;
     line-height: 1.4;
 }

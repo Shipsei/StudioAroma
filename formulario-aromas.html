@@ -7,6 +7,14 @@
     <link rel="stylesheet" href="formulario-aromas.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Google Maps API - Reemplaza YOUR_API_KEY con tu API key de Google Maps -->
+    <script>
+        // Función para inicializar cuando Google Maps esté listo
+        function initGoogleMaps() {
+            window.dispatchEvent(new Event('google-maps-loaded'));
+        }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places&callback=initGoogleMaps" async defer></script>
 </head>
 <body>
     <!-- Header -->
@@ -159,6 +167,11 @@
                     <div class="form-group">
                         <label for="userPhone">📱 Número de teléfono</label>
                         <input type="tel" id="userPhone" placeholder="+52 55 1234 5678" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="userAddress">📍 Dirección</label>
+                        <input type="text" id="userAddress" placeholder="Escribe tu dirección completa" required autocomplete="off">
+                        <small class="form-hint">Comienza a escribir y selecciona tu dirección de la lista</small>
                     </div>
                 </div>
                 <div class="step-actions">

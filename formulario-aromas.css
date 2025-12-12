@@ -1397,6 +1397,59 @@ body.has-plan-info .form-container {
     border-color: rgba(100, 255, 100, 0.5);
 }
 
+.form-hint {
+    display: block;
+    color: #888888;
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+    font-style: italic;
+}
+
+/* Google Maps Autocomplete Styles */
+.pac-container {
+    background: rgba(0, 0, 0, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    margin-top: 0.5rem;
+    font-family: 'Inter', sans-serif;
+}
+
+.pac-item {
+    padding: 1rem 1.5rem;
+    color: #ffffff;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.pac-item:first-child {
+    border-top: none;
+}
+
+.pac-item:hover,
+.pac-item-selected {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.pac-item-query {
+    color: #ffffff;
+    font-size: 1rem;
+}
+
+.pac-matched {
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.pac-icon {
+    margin-right: 0.8rem;
+}
+
+.pac-item-query .pac-matched {
+    color: #ffffff;
+}
+
 /* Step Actions */
 .step-actions {
     display: flex;

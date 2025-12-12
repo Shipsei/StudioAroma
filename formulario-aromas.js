@@ -10,7 +10,9 @@ class AromaForm {
             spaces: [],
             userName: '',
             userEmail: '',
-            userPhone: ''
+            userPhone: '',
+            userAddress: '',
+            addressDetails: null
         };
         this.equipmentData = null;
         this.sessionId = null;
@@ -314,6 +316,9 @@ class AromaForm {
         this.setupEventListeners();
         this.updateProgress();
         
+        // Inicializar Google Maps Autocomplete si está disponible
+        this.initGoogleMapsAutocomplete();
+        
         // Solo validar el paso actual si no se cargó progreso guardado
         if (!progressLoaded) {
             this.validateStep(this.currentStep);
@@ -566,6 +571,7 @@ class AromaForm {
             this.validateStep(5);
         });
 
+
         // Opciones de selección
         document.querySelectorAll('.option-card').forEach(card => {
             card.addEventListener('click', () => {
@@ -636,7 +642,8 @@ class AromaForm {
             case 5:
                 isValid = this.formData.userName.trim().length > 0 && 
                          this.isValidEmail(this.formData.userEmail) && 
-                         this.isValidPhone(this.formData.userPhone);
+                         this.isValidPhone(this.formData.userPhone) &&
+                         this.formData.userAddress.trim().length > 0;
                 break;
         }
         
@@ -1272,6 +1279,112 @@ class AromaForm {
     // Cerrar mensaje
     closeMessage() {
         document.getElementById('messageOverlay').style.display = 'none';
+    }
+
+    // Inicializar Google Maps Autocomplete
+    initGoogleMapsAutocomplete() {
+        const addressInput = document.getElementById('userAddress');
+        if (!addressInput) {
+            return;
+        }
+
+        // Función para inicializar cuando Google Maps esté disponible
+        const initAutocomplete = () => {
+            if (!window.google || !window.google.maps || !window.google.maps.places) {
+                console.warn('⚠️ Google Maps API no está disponible. El campo de dirección funcionará sin autocompletado.');
+                // Permitir entrada manual aunque no haya autocomplete
+                addressInput.addEventListener('input', (e) => {
+                    this.formData.userAddress = e.target.value;
+                    this.validateStep(5);
+                });
+                return;
+            }
+
+            try {
+                // Configurar Autocomplete para México (CDMX y área metropolitana)
+                const autocomplete = new google.maps.places.Autocomplete(addressInput, {
+                    componentRestrictions: { country: 'mx' },
+                    fields: ['formatted_address', 'geometry', 'address_components', 'place_id'],
+                    types: ['address']
+                });
+
+                // Cuando se selecciona una dirección
+                autocomplete.addListener('place_changed', () => {
+                    const place = autocomplete.getPlace();
+                    
+                    if (!place.geometry) {
+                        console.warn('⚠️ No se encontró información de la dirección');
+                        this.formData.userAddress = addressInput.value;
+                        this.validateStep(5);
+                        return;
+                    }
+
+                    // Guardar dirección completa
+                    this.formData.userAddress = place.formatted_address || addressInput.value;
+                    
+                    // Guardar detalles adicionales
+                    this.formData.addressDetails = {
+                        formatted_address: place.formatted_address,
+                        place_id: place.place_id,
+                        geometry: {
+                            lat: place.geometry.location.lat(),
+                            lng: place.geometry.location.lng()
+                        },
+                        address_components: place.address_components
+                    };
+
+                    console.log('✅ Dirección seleccionada:', this.formData.addressDetails);
+                    
+                    // Validar el paso
+                    this.validateStep(5);
+                });
+
+                console.log('✅ Google Maps Autocomplete inicializado');
+            } catch (error) {
+                console.error('❌ Error inicializando Google Maps Autocomplete:', error);
+            }
+        };
+
+        // Intentar inicializar inmediatamente
+        if (window.google && window.google.maps && window.google.maps.places) {
+            initAutocomplete();
+        } else {
+            // Esperar a que Google Maps se cargue
+            window.addEventListener('google-maps-loaded', initAutocomplete);
+            
+            // También verificar periódicamente (fallback)
+            let attempts = 0;
+            const checkInterval = setInterval(() => {
+                if (window.google && window.google.maps && window.google.maps.places) {
+                    clearInterval(checkInterval);
+                    initAutocomplete();
+                }
+                attempts++;
+                if (attempts > 20) { // 10 segundos máximo
+                    clearInterval(checkInterval);
+                    console.warn('⚠️ Google Maps no se cargó después de 10 segundos');
+                    initAutocomplete(); // Intentar de todas formas
+                }
+            }, 500);
+        }
+
+        // Guardar dirección cuando se escribe manualmente
+        addressInput.addEventListener('input', (e) => {
+            if (e.target.value.trim().length > 0) {
+                this.formData.userAddress = e.target.value;
+                this.validateStep(5);
+            }
+        });
+
+        // Prevenir submit del formulario al presionar Enter en el autocomplete
+        addressInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && e.target.value.trim().length > 0) {
+                // Permitir Enter solo si hay texto
+                setTimeout(() => {
+                    this.validateStep(5);
+                }, 100);
+            }
+        });
     }
 }
 

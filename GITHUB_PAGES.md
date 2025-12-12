@@ -1,16 +1,16 @@
 # 📦 Guía para Publicar en GitHub Pages
 
-## Paso 1: Crear el Repositorio en GitHub
+## Paso 1: Hacer el Repositorio Público
 
-1. Ve a [GitHub](https://github.com) e inicia sesión
-2. Haz clic en el botón **"+"** en la esquina superior derecha
-3. Selecciona **"New repository"**
-4. Configura el repositorio:
-   - **Repository name**: `StudioAroma` (o el nombre que prefieras)
-   - **Description**: "Sitio web de Studio Aroma - Servicio de aromatización profesional"
-   - **Visibilidad**: Público (requerido para GitHub Pages gratuito)
-   - **NO** marques "Initialize this repository with a README"
-5. Haz clic en **"Create repository"**
+**IMPORTANTE**: GitHub Pages gratuito solo funciona con repositorios públicos.
+
+1. Ve a tu repositorio: https://github.com/Shipsei/StudioAroma
+2. Haz clic en **"Settings"** (Configuración)
+3. Desplázate hasta la sección **"Danger Zone"** (Zona de Peligro) al final de la página
+4. Haz clic en **"Change visibility"** (Cambiar visibilidad)
+5. Selecciona **"Make public"** (Hacer público)
+6. Confirma escribiendo el nombre del repositorio: `Shipsei/StudioAroma`
+7. Haz clic en **"I understand, change repository visibility"**
 
 ## Paso 2: Conectar tu Repositorio Local con GitHub
 

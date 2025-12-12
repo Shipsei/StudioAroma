@@ -1221,16 +1221,48 @@ section {
     }
     
     .nav-menu {
-        display: none;
+        position: fixed;
+        top: 90px;
+        left: 0;
+        right: 0;
+        background: rgba(0, 0, 0, 0.98);
+        backdrop-filter: blur(20px);
+        flex-direction: column;
+        padding: 2rem;
+        gap: 1.5rem;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        z-index: 999;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+    }
+    
+    .nav-menu.active {
+        transform: translateX(0);
     }
     
     .nav-link {
-        font-size: 0.8rem;
+        font-size: 1rem;
         letter-spacing: 0.3px;
+        padding: 0.8rem 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     }
     
     .nav-toggle {
         display: flex;
+        z-index: 1001;
+    }
+    
+    .nav-toggle.active span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+    }
+    
+    .nav-toggle.active span:nth-child(2) {
+        opacity: 0;
+    }
+    
+    .nav-toggle.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(7px, -6px);
     }
     
     .services,
@@ -1389,9 +1421,20 @@ section {
         background-attachment: scroll;
         background-size: 75% auto;
         background-position: right center;
+        padding-top: 100px;
+        min-height: auto;
+        margin-top: 0;
     }
     
     .hero::after {
         width: 50%;
+    }
+    
+    .hero-container {
+        padding-top: 1rem;
+    }
+    
+    .hero-title {
+        margin-top: 0;
     }
 }

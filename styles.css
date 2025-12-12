@@ -188,9 +188,8 @@ p {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 2rem;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 4rem;
+    display: flex;
+    justify-content: flex-end;
     align-items: center;
     position: relative;
     z-index: 2;
@@ -208,9 +207,11 @@ p {
     z-index: 1;
 }
 
-.hero-content {
-    max-width: 600px;
-}
+    .hero-content {
+        max-width: 100%;
+        text-align: center;
+        margin-left: 0;
+    }
 
 .hero-title {
     font-size: 3.5rem;
@@ -237,6 +238,7 @@ p {
     display: flex;
     gap: 1rem;
     margin-bottom: 2rem;
+    justify-content: flex-end;
 }
 
 .btn {
@@ -1361,9 +1363,8 @@ section {
     }
     
     .hero-container {
-        grid-template-columns: 1fr;
+        justify-content: center;
         text-align: center;
-        gap: 2rem;
         padding: 0 1.5rem;
     }
     
@@ -1387,6 +1388,7 @@ section {
         gap: 1rem;
         margin-bottom: 2rem;
         padding: 0 1rem;
+        justify-content: center;
     }
     
     .hero-badge {

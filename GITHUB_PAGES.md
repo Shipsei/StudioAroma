@@ -14,13 +14,13 @@
 
 ## Paso 2: Conectar tu Repositorio Local con GitHub
 
-Ejecuta estos comandos en tu terminal (reemplaza `TU_USUARIO` con tu nombre de usuario de GitHub):
+Ejecuta estos comandos en tu terminal:
 
 ```bash
 cd /Users/moisessadovitch/Programaciones/StudioAroma
 
 # Agregar el repositorio remoto
-git remote add origin https://github.com/TU_USUARIO/StudioAroma.git
+git remote add origin https://github.com/Shipsei/StudioAroma.git
 
 # Cambiar el nombre de la rama a main (si no lo has hecho)
 git branch -M main
@@ -44,7 +44,7 @@ git push -u origin main
 
 - GitHub Pages tardará unos minutos en procesar tu sitio
 - Verás un mensaje verde indicando que tu sitio está publicado
-- Tu sitio estará disponible en: `https://TU_USUARIO.github.io/StudioAroma/`
+- Tu sitio estará disponible en: `https://shipsei.github.io/StudioAroma/`
 
 ## 🔄 Actualizar el Sitio
 

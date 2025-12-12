@@ -401,7 +401,7 @@ p {
     letter-spacing: 0.2px;
 }
 
-/* Estilos especùficos para diferentes planes */
+/* Estilos espec?ficos para diferentes planes */
 .plan-info-card[data-plan="prueba"] {
     border-color: rgba(255, 215, 0, 0.3);
     box-shadow: 
@@ -437,7 +437,7 @@ p {
 
 /* Ajustar margen del form-container cuando hay plan info */
 body.has-plan-info .form-container {
-    margin-top: 220px;
+    margin-top: 200px;
 }
 
 /* Responsive para plan info */

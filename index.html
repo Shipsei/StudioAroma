@@ -551,6 +551,60 @@
         </div>
     </footer>
 
+    <!-- Dev: Clear Cache Button -->
+    <button id="devClearCache" class="dev-clear-cache-btn" title="Limpiar cache (solo desarrollo)">
+        <i class="fas fa-trash-alt"></i>
+        <span>Limpiar Cache</span>
+    </button>
+
     <script src="script.js"></script>
+    <script>
+        // Dev: Clear Cache Functionality
+        (function() {
+            const clearCacheBtn = document.getElementById('devClearCache');
+            
+            if (clearCacheBtn) {
+                clearCacheBtn.addEventListener('click', function() {
+                    if (confirm('¿Estás seguro de que quieres limpiar todo el cache del sitio?')) {
+                        // Limpiar localStorage
+                        try {
+                            const keys = Object.keys(localStorage);
+                            keys.forEach(key => {
+                                if (key.includes('studioAroma') || key.includes('selectedAroma') || key.includes('selectedPlan')) {
+                                    localStorage.removeItem(key);
+                                }
+                            });
+                            console.log('✅ localStorage limpiado');
+                        } catch (e) {
+                            console.error('Error limpiando localStorage:', e);
+                        }
+                        
+                        // Limpiar sessionStorage
+                        try {
+                            sessionStorage.clear();
+                            console.log('✅ sessionStorage limpiado');
+                        } catch (e) {
+                            console.error('Error limpiando sessionStorage:', e);
+                        }
+                        
+                        // Limpiar cache del navegador (si es posible)
+                        if ('caches' in window) {
+                            caches.keys().then(function(names) {
+                                for (let name of names) {
+                                    caches.delete(name);
+                                }
+                                console.log('✅ Cache del navegador limpiado');
+                            });
+                        }
+                        
+                        // Recargar la página
+                        setTimeout(() => {
+                            window.location.reload(true);
+                        }, 500);
+                    }
+                });
+            }
+        })();
+    </script>
 </body>
 </html>

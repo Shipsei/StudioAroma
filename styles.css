@@ -2087,3 +2087,73 @@ section {
         margin-top: 0;
     }
 }
+
+/* Dev: Clear Cache Button */
+.dev-clear-cache-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+    color: #ffffff;
+    border: none;
+    border-radius: 50px;
+    padding: 0.8rem 1.5rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    transition: all 0.3s ease;
+    font-family: 'Inter', sans-serif;
+}
+
+.dev-clear-cache-btn:hover {
+    background: linear-gradient(135deg, #ee5a6f 0%, #ff6b6b 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 107, 107, 0.5);
+}
+
+.dev-clear-cache-btn:active {
+    transform: translateY(0);
+}
+
+.dev-clear-cache-btn i {
+    font-size: 1rem;
+}
+
+.dev-clear-cache-btn span {
+    display: inline-block;
+}
+
+/* Ocultar en producción - solo mostrar en localhost o desarrollo */
+@media (min-width: 1px) {
+    /* Mostrar siempre por ahora - puedes cambiar esto después */
+    .dev-clear-cache-btn {
+        display: flex;
+    }
+}
+
+/* Ocultar en pantallas muy pequeñas para no molestar */
+@media (max-width: 480px) {
+    .dev-clear-cache-btn {
+        bottom: 15px;
+        right: 15px;
+        padding: 0.7rem 1.2rem;
+        font-size: 0.75rem;
+    }
+    
+    .dev-clear-cache-btn span {
+        display: none;
+    }
+    
+    .dev-clear-cache-btn {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        justify-content: center;
+        padding: 0;
+    }
+}

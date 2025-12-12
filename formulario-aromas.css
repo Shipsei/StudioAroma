@@ -352,6 +352,7 @@ p {
     flex: 1;
     font-weight: 500;
     line-height: 1.5;
+    white-space: nowrap; /* Evitar que el texto se divida en múltiples líneas */
 }
 
 .plan-price {
@@ -463,11 +464,17 @@ body.has-plan-info .form-container {
     }
     
     .plan-detail-item {
-        font-size: 0.85rem;
+        font-size: 0.8rem; /* Reducir tamaño para que quepa en una línea */
         padding: 0.45rem 0.7rem;
         gap: 0.6rem;
         width: 100%;
-        white-space: normal;
+        white-space: nowrap; /* Cambiar a nowrap para mantener en una línea */
+    }
+    
+    .plan-detail-item span {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis; /* Si aún no cabe, mostrar ... */
     }
     
     .plan-detail-item i {
@@ -515,11 +522,17 @@ body.has-plan-info .form-container {
     }
     
     .plan-detail-item {
-        font-size: 0.8rem;
+        font-size: 0.75rem; /* Reducir más en móvil para que quepa en una línea */
         padding: 0.4rem 0.6rem;
         gap: 0.5rem;
         width: 100%;
-        white-space: normal;
+        white-space: nowrap; /* Cambiar a nowrap para mantener en una línea */
+    }
+    
+    .plan-detail-item span {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis; /* Si aún no cabe, mostrar ... */
     }
     
     .plan-detail-item i {

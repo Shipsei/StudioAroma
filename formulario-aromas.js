@@ -12,11 +12,13 @@ class AromaForm {
             userEmail: '',
             userPhone: '',
             userAddress: '',
-            addressDetails: null
+            addressDetails: null,
+            selectedAroma: null // Aroma seleccionado desde aromas.html
         };
         this.equipmentData = null;
         this.sessionId = null;
         this.apiBaseUrl = 'http://localhost:8080/api';
+        this.skipStep3 = false; // Flag para omitir el paso 3 si hay aroma y plan
         
         // Datos estáticos para diferentes IDs
         this.staticData = {
@@ -375,6 +377,12 @@ class AromaForm {
         // Cargar información del plan desde la URL
         this.loadPlanFromURL();
         
+        // Cargar aroma desde la URL
+        this.loadAromaFromURL();
+        
+        // Verificar si debemos omitir el paso 3 (si hay aroma y plan)
+        this.checkSkipStep3();
+        
         // Intentar cargar progreso guardado (solo si se solicita explícitamente)
         const progressLoaded = this.loadSavedProgress();
         
@@ -493,12 +501,69 @@ class AromaForm {
 
             // Renderizar las notas
             this.renderAromaticNotes(notes);
+            
+            // Si hay un aroma seleccionado desde la URL, pre-seleccionarlo
+            if (this.formData.selectedAroma && !this.skipStep3) {
+                this.preselectAromaFromURL();
+            }
         } catch (error) {
             console.error('❌ Error cargando notas aromáticas desde la API:', error);
             
             // Fallback a datos estáticos
             console.log('⚠️ Usando datos estáticos como fallback');
             this.renderAromaticNotes(this.aromaticNotes);
+            
+            // Si hay un aroma seleccionado desde la URL, pre-seleccionarlo
+            if (this.formData.selectedAroma && !this.skipStep3) {
+                this.preselectAromaFromURL();
+            }
+        }
+    }
+
+    // Pre-seleccionar aroma basado en el nombre del aroma desde la URL
+    preselectAromaFromURL() {
+        if (!this.formData.selectedAroma) return;
+        
+        // Mapear nombres de aromas a notas aromáticas
+        // Esto es una aproximación - en producción deberías tener una relación más precisa
+        const aromaToNotesMap = {
+            'Hotel': [1, 2], // Floral, Fresco
+            'Santal': [3, 4], // Amaderado, Oriental
+            'Green Lavender': [1, 12], // Floral, Lavanda
+            'After Eight': [1], // Floral
+            'Starwoods': [1, 2], // Floral, Fresco
+            'Sandalwood': [3], // Amaderado
+            'Green Tea White': [5, 1, 2], // Cítrico, Floral, Fresco
+            'Oriental White': [5, 4], // Cítrico, Oriental
+            'Crushed Lime': [5], // Cítrico
+            'Lime Mint Aqua': [5, 8], // Cítrico, Aromático
+            'Green Tea Lemongrass': [5, 8], // Cítrico, Herbal
+            'Sencha': [5, 1], // Cítrico, Floral
+            'Aqua Lime': [5, 7], // Cítrico, Acuático
+            'Love and Joy': [9, 5], // Frutal, Cítrico
+            'Ocean': [2, 7], // Fresco, Marino
+            'Cashmere Fig': [9, 3], // Frutal, Amaderado
+            'Green Tea Ci': [5, 8] // Cítrico, Té Verde
+        };
+        
+        const aromaName = this.formData.selectedAroma;
+        const noteIds = aromaToNotesMap[aromaName] || [];
+        
+        if (noteIds.length > 0) {
+            // Seleccionar las notas correspondientes
+            noteIds.forEach(noteId => {
+                const noteCard = document.querySelector(`.aroma-card[data-note-id="${noteId}"]`);
+                if (noteCard) {
+                    const note = this.aromaticNotes.find(n => n.id === noteId);
+                    if (note) {
+                        this.toggleNoteSelection(noteId, noteCard);
+                    }
+                }
+            });
+            
+            console.log(`✅ Aroma "${aromaName}" pre-seleccionado con notas:`, noteIds);
+        } else {
+            console.warn(`⚠️ No se encontró mapeo para el aroma: ${aromaName}`);
         }
     }
 
@@ -688,7 +753,29 @@ class AromaForm {
 
     // Validar paso actual
     validateStep(step) {
-        const continueBtn = this.getCurrentStepElement().querySelector('.btn-primary');
+        // Si no se especifica el paso, usar el paso visualmente activo
+        if (!step) {
+            const activeStep = document.querySelector('.step-content.active');
+            if (activeStep) {
+                const stepId = activeStep.id;
+                step = parseInt(stepId.replace('step', ''));
+            } else {
+                step = this.currentStep;
+            }
+        }
+        
+        // Obtener el elemento del paso a validar
+        const stepElement = document.getElementById(`step${step}`);
+        if (!stepElement) {
+            console.warn(`No se encontró el elemento step${step}`);
+            return;
+        }
+        
+        // Buscar el botón de continuar - puede estar en .step-actions o directamente en el paso
+        let continueBtn = stepElement.querySelector('.step-actions .btn-primary');
+        if (!continueBtn) {
+            continueBtn = stepElement.querySelector('.btn-primary');
+        }
         
         let isValid = false;
         
@@ -700,11 +787,17 @@ class AromaForm {
                 isValid = this.formData.installationType !== null;
                 break;
             case 3:
-                isValid = this.formData.preferredNotes.length > 0;
+                // Si estamos omitiendo el paso 3, siempre es válido
+                if (this.skipStep3) {
+                    isValid = true;
+                } else {
+                    isValid = this.formData.preferredNotes.length > 0;
+                }
                 break;
             case 4:
-                isValid = this.formData.spaces.length > 0 && 
+                const spacesValid = this.formData.spaces.length > 0 && 
                          this.formData.spaces.every(space => space.type !== null && space.size !== null);
+                isValid = spacesValid;
                 break;
             case 5:
                 isValid = this.formData.userName.trim().length > 0 && 
@@ -714,7 +807,27 @@ class AromaForm {
                 break;
         }
         
-        continueBtn.disabled = !isValid;
+        if (continueBtn) {
+            continueBtn.disabled = !isValid;
+            // También remover el atributo disabled si es válido (por si acaso)
+            if (isValid) {
+                continueBtn.removeAttribute('disabled');
+            } else {
+                continueBtn.setAttribute('disabled', 'disabled');
+            }
+            console.log(`✅ Validación paso ${step}:`, isValid ? 'Válido' : 'Inválido', {
+                spaces: this.formData.spaces.length,
+                spacesComplete: this.formData.spaces.every(space => space.type !== null && space.size !== null),
+                buttonFound: !!continueBtn,
+                buttonDisabled: continueBtn.disabled
+            });
+        } else {
+            console.warn(`No se encontró el botón de continuar en step${step}`, {
+                stepElement: !!stepElement,
+                stepActions: !!stepElement.querySelector('.step-actions'),
+                allButtons: stepElement.querySelectorAll('button').length
+            });
+        }
     }
 
     // Validar email
@@ -852,8 +965,21 @@ class AromaForm {
 
     // Siguiente paso
     async nextStep() {
-        if (this.currentStep < this.totalSteps) {
+        // Calcular el máximo paso posible
+        // Si skipStep3 es true, totalSteps es 4 pero el último paso real es 5
+        const maxStep = this.skipStep3 ? 5 : this.totalSteps;
+        
+        if (this.currentStep < maxStep) {
             this.currentStep++;
+            
+            // Si debemos omitir el paso 3 y estamos en el paso 2, saltar al paso 4
+            if (this.skipStep3 && this.currentStep === 3) {
+                this.currentStep = 4;
+                console.log('⏭️ Saltando paso 3 (aroma ya seleccionado)');
+            }
+            
+            console.log(`➡️ Avanzando al paso ${this.currentStep} (maxStep: ${maxStep}, skipStep3: ${this.skipStep3})`);
+            
             this.showStep(this.currentStep);
             this.updateProgress();
             
@@ -871,9 +997,11 @@ class AromaForm {
             this.saveProgress();
             
             // Si llegamos al paso 3 y hay información de aroma cargada, mostrarla
-            if (this.currentStep === 3) {
+            if (this.currentStep === 3 && !this.skipStep3) {
                 this.insertAromaInfo();
             }
+        } else {
+            console.log(`⚠️ No se puede avanzar: currentStep (${this.currentStep}) >= maxStep (${maxStep})`);
         }
     }
 
@@ -881,6 +1009,13 @@ class AromaForm {
     prevStep() {
         if (this.currentStep > 1) {
             this.currentStep--;
+            
+            // Si debemos omitir el paso 3 y estamos en el paso 4, saltar al paso 2
+            if (this.skipStep3 && this.currentStep === 3) {
+                this.currentStep = 2;
+                console.log('⏭️ Saltando paso 3 hacia atrás (aroma ya seleccionado)');
+            }
+            
             this.showStep(this.currentStep);
             this.updateProgress();
         }
@@ -904,21 +1039,54 @@ class AromaForm {
             el.classList.remove('active');
         });
         
-        const currentStepProgress = document.querySelector(`.step[data-step="${step}"]`);
+        // Mostrar el paso correspondiente en la barra de progreso
+        // Si estamos omitiendo el paso 3, el paso 4 se muestra como paso 3 en la barra
+        let progressStep = step;
+        if (this.skipStep3 && step === 4) {
+            progressStep = 3; // El paso 4 se muestra como paso 3 en la barra
+        } else if (this.skipStep3 && step === 5) {
+            progressStep = 4; // El paso 5 se muestra como paso 4 en la barra
+        }
+        
+        const currentStepProgress = document.querySelector(`.step[data-step="${progressStep}"]`);
         if (currentStepProgress) {
             currentStepProgress.classList.add('active');
         }
         
         // Si se muestra el paso 3 y hay información de aroma cargada, mostrarla
-        if (step === 3) {
+        if (step === 3 && !this.skipStep3) {
             this.insertAromaInfo();
         }
+        
+        // Validar el paso actual después de un pequeño delay para asegurar que el DOM esté actualizado
+        setTimeout(() => {
+            this.validateStep(step);
+        }, 100);
     }
 
     // Actualizar barra de progreso
     updateProgress() {
-        const progress = (this.currentStep / this.totalSteps) * 100;
+        // Calcular el progreso basado en el paso actual
+        // Si skipStep3 es true, ajustar el cálculo para que el paso 4 muestre 75% y el paso 5 muestre 100%
+        let adjustedStep = this.currentStep;
+        if (this.skipStep3 && this.currentStep >= 4) {
+            // Ajustar: paso 4 → 3/4 = 75%, paso 5 → 4/4 = 100%
+            adjustedStep = this.currentStep - 1;
+        }
+        const totalVisibleSteps = this.skipStep3 ? 4 : 5;
+        const progress = (adjustedStep / totalVisibleSteps) * 100;
         document.getElementById('progressFill').style.width = `${progress}%`;
+        
+        // Actualizar los pasos visibles en la barra de progreso
+        // Si estamos omitiendo el paso 3, ocultarlo en la barra
+        document.querySelectorAll('.step').forEach((stepEl, index) => {
+            const stepNumber = index + 1;
+            if (this.skipStep3 && stepNumber === 3) {
+                stepEl.style.display = 'none'; // Ocultar paso 3
+            } else {
+                stepEl.style.display = 'flex';
+            }
+        });
     }
 
     // Guardar selección en localStorage
@@ -1044,6 +1212,80 @@ class AromaForm {
         }
     }
 
+    // Cargar aroma desde la URL
+    loadAromaFromURL() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const aroma = urlParams.get('aroma');
+        
+        if (aroma) {
+            this.formData.selectedAroma = decodeURIComponent(aroma);
+            console.log('✅ Aroma cargado desde URL:', this.formData.selectedAroma);
+        }
+    }
+
+    // Verificar si debemos omitir el paso 3
+    checkSkipStep3() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const planType = urlParams.get('plan');
+        const aroma = urlParams.get('aroma');
+        
+        // Si hay plan y aroma, omitir el paso 3
+        if (planType && aroma) {
+            this.skipStep3 = true;
+            // NO reducir totalSteps, mantenerlo en 5 porque aún necesitamos llegar al paso 5
+            // Solo ocultamos visualmente el paso 3 en la barra de progreso
+            console.log('✅ Paso 3 omitido: hay plan y aroma seleccionados');
+            
+            // Pre-seleccionar notas basadas en el aroma (para que el formulario tenga datos)
+            this.preselectNotesFromAroma();
+            
+            // Ocultar el paso 3 en la barra de progreso
+            const step3Progress = document.querySelector('.step[data-step="3"]');
+            if (step3Progress) {
+                step3Progress.style.display = 'none';
+            }
+        }
+    }
+
+    // Pre-seleccionar notas aromáticas basadas en el aroma seleccionado
+    preselectNotesFromAroma() {
+        if (!this.formData.selectedAroma) return;
+        
+        // Mapear nombres de aromas a IDs de notas aromáticas
+        const aromaToNotesMap = {
+            'Hotel': [1, 2], // Floral, Fresco
+            'Santal': [3, 4], // Amaderado, Oriental
+            'Green Lavender': [1, 12], // Floral, Lavanda
+            'After Eight': [1], // Floral
+            'Starwoods': [1, 2], // Floral, Fresco
+            'Sandalwood': [3], // Amaderado
+            'Green Tea White': [5, 1, 2], // Cítrico, Floral, Fresco
+            'Oriental White': [5, 4], // Cítrico, Oriental
+            'Crushed Lime': [5], // Cítrico
+            'Lime Mint Aqua': [5, 8], // Cítrico, Herbal
+            'Green Tea Lemongrass': [5, 8], // Cítrico, Herbal
+            'Sencha': [5, 1], // Cítrico, Floral
+            'Aqua Lime': [5, 7], // Cítrico, Marino
+            'Love and Joy': [9, 5], // Dulce, Cítrico
+            'Ocean': [2, 7], // Fresco, Marino
+            'Cashmere Fig': [9, 3], // Dulce, Amaderado
+            'Green Tea Ci': [5, 8] // Cítrico, Herbal
+        };
+        
+        const aromaName = this.formData.selectedAroma;
+        const noteIds = aromaToNotesMap[aromaName] || [];
+        
+        if (noteIds.length > 0) {
+            // Seleccionar las notas correspondientes en formData
+            this.formData.preferredNotes = noteIds;
+            console.log(`✅ Notas pre-seleccionadas para "${aromaName}":`, noteIds);
+        } else {
+            console.warn(`⚠️ No se encontró mapeo para el aroma: ${aromaName}`);
+            // Si no hay mapeo, usar "No estoy seguro"
+            this.formData.preferredNotes = ['unsure'];
+        }
+    }
+
     // Mostrar información del plan
     displayPlanInfo(planType) {
         const planInfoContainer = document.getElementById('planInfoContainer');
@@ -1088,7 +1330,7 @@ class AromaForm {
                 details: `
                     <div class="plan-detail-item">
                         <i class="fas fa-map-marker-alt"></i>
-                        <span>Cobertura completa en Ciudad de México y área metropolitana</span>
+                        <span>Cobertura: Ciudad de México y área metropolitana</span>
                     </div>
                     <div class="plan-price">
                         <div class="plan-price-wrapper">
@@ -1107,7 +1349,7 @@ class AromaForm {
                     </div>
                     <div class="plan-detail-item">
                         <i class="fas fa-map-marker-alt"></i>
-                        <span>Cobertura completa en Ciudad de México y área metropolitana</span>
+                        <span>Cobertura: Ciudad de México y área metropolitana</span>
                     </div>
                     <div class="plan-price">
                         <div class="plan-price-wrapper">
@@ -1520,7 +1762,10 @@ function selectSpaceType(spaceId, typeId) {
         if (space) {
             space.type = typeId;
             window.aromaForm.renderSpaces();
-            window.aromaForm.validateStep(4);
+            // Validar después de que el DOM se actualice
+            setTimeout(() => {
+                window.aromaForm.validateStep(4);
+            }, 50);
         }
     } else {
         console.error('AromaForm no está inicializado');
@@ -1533,7 +1778,10 @@ function selectSpaceSize(spaceId, sizeId) {
         if (space) {
             space.size = sizeId;
             window.aromaForm.renderSpaces();
-            window.aromaForm.validateStep(4);
+            // Validar después de que el DOM se actualice
+            setTimeout(() => {
+                window.aromaForm.validateStep(4);
+            }, 50);
         }
     } else {
         console.error('AromaForm no está inicializado');
@@ -1584,20 +1832,29 @@ function selectNoteType(spaceId, typeId) {
             // Actualizar el valor mostrado
             const searchInput = document.querySelector(`[data-space-id="${spaceId}"] .search-value`);
             const selectedType = window.aromaForm.spaceTypes.find(t => t.id === typeId);
-            searchInput.textContent = selectedType ? `${selectedType.icon} ${selectedType.name}` : 'Selecciona un tipo';
+            if (searchInput) {
+                searchInput.textContent = selectedType ? `${selectedType.icon} ${selectedType.name}` : 'Selecciona un tipo';
+            }
             
             // Cerrar dropdown
             const dropdown = document.getElementById(`dropdown-${spaceId}`);
             const arrow = document.querySelector(`[data-space-id="${spaceId}"] .search-arrow`);
-            dropdown.style.display = 'none';
-            arrow.style.transform = 'rotate(0deg)';
+            if (dropdown) dropdown.style.display = 'none';
+            if (arrow) arrow.style.transform = 'rotate(0deg)';
             
             // Limpiar búsqueda
-            const searchInputField = dropdown.querySelector('.space-type-search');
-            searchInputField.value = '';
-            filterSpaceTypes(spaceId, '');
+            if (dropdown) {
+                const searchInputField = dropdown.querySelector('.space-type-search');
+                if (searchInputField) {
+                    searchInputField.value = '';
+                    filterSpaceTypes(spaceId, '');
+                }
+            }
             
-            window.aromaForm.validateStep(4);
+            // Validar después de que el DOM se actualice
+            setTimeout(() => {
+                window.aromaForm.validateStep(4);
+            }, 50);
         }
     } else {
         console.error('AromaForm no está inicializado');

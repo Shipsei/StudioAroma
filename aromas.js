@@ -129,17 +129,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Header background on scroll
-    const header = document.querySelector('.header');
-    
-    window.addEventListener('scroll', function() {
-        if (window.scrollY > 100) {
-            header.style.background = 'rgba(0, 0, 0, 0.98)';
-        } else {
-            header.style.background = 'rgba(0, 0, 0, 0.95)';
-        }
-    });
-    
     // Mobile menu toggle
     const navToggle = document.querySelector('.nav-toggle');
     const navMenu = document.querySelector('.nav-menu');
@@ -178,33 +167,8 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Redirect to plans page with aroma parameter
             setTimeout(() => {
-                window.location.href = `index.html#precios?aroma=${encodeURIComponent(selectedAroma)}`;
+                window.location.href = `planes.html?aroma=${encodeURIComponent(selectedAroma)}`;
             }, 1000);
         });
     });
 });
-
-// Utility functions
-function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-    };
-}
-
-// Optimized scroll handler
-const optimizedScrollHandler = debounce(function() {
-    const header = document.querySelector('.header');
-    if (window.scrollY > 100) {
-        header.style.background = 'rgba(0, 0, 0, 0.98)';
-    } else {
-        header.style.background = 'rgba(0, 0, 0, 0.95)';
-    }
-}, 10);
-
-window.addEventListener('scroll', optimizedScrollHandler);

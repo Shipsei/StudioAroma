@@ -448,106 +448,31 @@ body.has-plan-info .form-container {
 /* Responsive para plan info */
 @media (max-width: 768px) {
     .plan-info-container {
-        padding: 0.6rem 1rem;
+        padding: 0.4rem 1rem;
+        top: 80px;
     }
     
-    .plan-info-card {
-        padding: 0.9rem 1.2rem;
-        border-radius: 10px;
-    }
-    
-    .plan-info-content h3 {
-        font-size: 1.1rem;
-        margin-bottom: 0.7rem;
-    }
-    
-    .plan-info-details {
-        flex-direction: column;
-        gap: 0.4rem;
-        margin-bottom: 0.7rem;
-    }
-    
-    .plan-detail-item {
-        font-size: 0.85rem;
-        padding: 0.45rem 0.7rem;
-        gap: 0.6rem;
-        width: 100%;
-        white-space: normal;
-    }
-    
-    .plan-detail-item i {
-        font-size: 0.9rem;
-        padding: 0.3rem;
-        width: 18px;
-    }
-    
-    .plan-price {
-        margin-top: 0.7rem;
-        padding-top: 0.7rem;
-    }
-    
-    .plan-price-amount {
-        font-size: 1.6rem;
-    }
-    
-    .plan-price-period {
+    .plan-simple-text {
         font-size: 0.8rem;
     }
     
-body.has-plan-info .form-container {
-    margin-top: 140px;
-}
+    body.has-plan-info .form-container {
+        margin-top: 120px;
+    }
 }
 
 @media (max-width: 480px) {
     .plan-info-container {
-        padding: 0.5rem;
+        padding: 0.4rem 0.8rem;
+        top: 75px;
     }
     
-    .plan-info-card {
-        padding: 0.8rem 1rem;
-    }
-    
-    .plan-info-content h3 {
-        font-size: 1rem;
-        margin-bottom: 0.6rem;
-    }
-    
-    .plan-info-details {
-        flex-direction: column;
-        gap: 0.35rem;
-        margin-bottom: 0.6rem;
-    }
-    
-    .plan-detail-item {
-        font-size: 0.8rem;
-        padding: 0.4rem 0.6rem;
-        gap: 0.5rem;
-        width: 100%;
-        white-space: normal;
-    }
-    
-    .plan-detail-item i {
-        font-size: 0.85rem;
-        padding: 0.25rem;
-        width: 16px;
-    }
-    
-    .plan-price {
-        margin-top: 0.6rem;
-        padding-top: 0.6rem;
-    }
-    
-    .plan-price-amount {
-        font-size: 1.4rem;
-    }
-    
-    .plan-price-period {
+    .plan-simple-text {
         font-size: 0.75rem;
     }
     
     body.has-plan-info .form-container {
-        margin-top: 180px;
+        margin-top: 110px;
     }
 }
 

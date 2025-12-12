@@ -971,6 +971,7 @@ section {
 .pricing-header {
     margin-bottom: 2rem;
     flex-shrink: 0;
+    width: 100%;
 }
 
 .pricing-header h3 {
@@ -1012,6 +1013,9 @@ section {
 .pricing-features {
     margin-bottom: 2rem;
     flex-grow: 1;
+    padding: 0;
+    text-align: left;
+    width: 100%;
 }
 
 .feature {

@@ -1230,21 +1230,23 @@ section {
     
     .nav-menu {
         position: fixed;
-        top: 70px;
+        top: 0;
         left: 0;
         right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100vh;
         background: rgba(0, 0, 0, 0.98);
         backdrop-filter: blur(20px);
         flex-direction: column;
-        padding: 1.5rem;
+        padding: 80px 1.5rem 2rem;
         gap: 1rem;
         transform: translateX(-100%);
         transition: transform 0.3s ease;
         z-index: 999;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         display: flex;
-        max-height: calc(100vh - 70px);
         overflow-y: auto;
+        box-shadow: none;
     }
     
     .nav-menu.active {
@@ -1650,8 +1652,8 @@ section {
     }
     
     .nav-menu {
-        top: 65px;
-        padding: 1.2rem;
+        top: 0;
+        padding: 75px 1rem 1.5rem;
     }
     
     /* Hero */

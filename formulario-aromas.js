@@ -1048,17 +1048,15 @@ class AromaForm {
     displayPlanInfo(planType) {
         const planInfoContainer = document.getElementById('planInfoContainer');
         const planInfoCard = planInfoContainer?.querySelector('.plan-info-card');
-        const planInfoTitle = document.getElementById('planInfoTitle');
         const planInfoDetails = document.getElementById('planInfoDetails');
         
-        if (!planInfoContainer || !planInfoTitle || !planInfoDetails) {
+        if (!planInfoContainer || !planInfoDetails) {
             return;
         }
 
         const planData = this.getPlanData(planType);
         
         if (planData) {
-            planInfoTitle.textContent = planData.title;
             planInfoDetails.innerHTML = planData.details;
             
             // Agregar atributo data-plan para estilos específicos
@@ -1076,23 +1074,8 @@ class AromaForm {
     getPlanData(planType) {
         const plans = {
             'prueba': {
-                title: 'Plan de Prueba',
-                details: `
-                    <div class="plan-detail-item">
-                        <i class="fas fa-clock"></i>
-                        <span>30 días de prueba con descuento especial</span>
-                    </div>
-                    <div class="plan-detail-item">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <span>Cobertura completa en Ciudad de México y área metropolitana</span>
-                    </div>
-                    <div class="plan-price">
-                        <div class="plan-price-wrapper">
-                            <span class="plan-price-amount">$260</span>
-                            <span class="plan-price-period">+ IVA por 1 mes</span>
-                        </div>
-                    </div>
-                `
+                title: '',
+                details: `<span class="plan-simple-text">Plan de Prueba: $260 + IVA por 1 mes</span>`
             },
             'individual': {
                 title: 'Plan Individual',

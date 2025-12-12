@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Modelos de Equipos - Studio Aroma</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: white;
+        }
+        .test-section {
+            background: #2a2a2a;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border-left: 4px solid #4CAF50;
+        }
+        .test-result {
+            background: #333;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .success { border-left-color: #4CAF50; }
+        .error { border-left-color: #f44336; }
+        .info { border-left-color: #2196F3; }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        .equipment-card {
+            background: #333;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #4CAF50;
+        }
+        .equipment-image {
+            width: 100px;
+            height: 100px;
+            background: #555;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 10px 0;
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔧 Test de Modelos de Equipos - Studio Aroma</h1>
+    
+    <div class="test-section info">
+        <h3>📋 Nueva Funcionalidad</h3>
+        <p>Se agregó la tabla <strong>equipment_models</strong> para almacenar información detallada de los modelos de equipos, incluyendo:</p>
+        <ul>
+            <li>✅ <strong>Nombre del modelo</strong></li>
+            <li>✅ <strong>Imagen del equipo</strong></li>
+            <li>✅ <strong>Descripción</strong></li>
+            <li>✅ <strong>Tipo de difusor</strong></li>
+            <li>✅ <strong>Especificaciones técnicas</strong></li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h3>🔗 Test 1: Obtener Modelos de Equipos</h3>
+        <button onclick="testGetEquipmentModels()">Obtener Todos los Modelos</button>
+        <div id="models-result" class="test-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>📱 Test 2: Obtener Equipo con Modelo</h3>
+        <button onclick="testGetEquipmentWithModel(1)">Equipo ID 1</button>
+        <button onclick="testGetEquipmentWithModel(2)">Equipo ID 2</button>
+        <div id="equipment-result" class="test-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>🎯 Test 3: Formulario con Nuevos Datos</h3>
+        <button onclick="testFormWithNewData()">Probar Formulario</button>
+        <div id="form-result" class="test-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>📊 Test 4: Comparar Datos Antes/Después</h3>
+        <button onclick="compareData()">Comparar Estructura</button>
+        <div id="compare-result" class="test-result"></div>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:8080/api';
+
+        async function testGetEquipmentModels() {
+            const resultDiv = document.getElementById('models-result');
+            resultDiv.textContent = 'Cargando modelos de equipos...';
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/equipment-models`);
+                const data = await response.json();
+                
+                if (response.ok) {
+                    let html = `✅ ${data.length} modelos encontrados:\n\n`;
+                    
+                    data.forEach(model => {
+                        html += `📱 ${model.name}\n`;
+                        html += `   Tipo: ${model.type}\n`;
+                        html += `   Descripción: ${model.description}\n`;
+                        html += `   Imagen: ${model.image}\n`;
+                        html += `   Especificaciones: ${JSON.stringify(model.specifications, null, 2)}\n\n`;
+                    });
+                    
+                    resultDiv.textContent = html;
+                    resultDiv.parentElement.className = 'test-section success';
+                } else {
+                    resultDiv.textContent = `❌ Error: ${data.error || 'Error desconocido'}`;
+                    resultDiv.parentElement.className = 'test-section error';
+                }
+            } catch (error) {
+                resultDiv.textContent = `❌ Error de conexión: ${error.message}`;
+                resultDiv.parentElement.className = 'test-section error';
+            }
+        }
+
+        async function testGetEquipmentWithModel(id) {
+            const resultDiv = document.getElementById('equipment-result');
+            resultDiv.textContent = `Cargando equipo ID ${id}...`;
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/equipment/${id}`);
+                const data = await response.json();
+                
+                if (response.ok) {
+                    let html = `✅ Equipo ${id} cargado:\n\n`;
+                    html += `📱 Modelo: ${data.model}\n`;
+                    html += `📍 Ubicación: ${data.location}\n`;
+                    html += `📅 Instalado: ${data.installation_date}\n\n`;
+                    
+                    if (data.equipment_model) {
+                        html += `🔧 Información del Modelo:\n`;
+                        html += `   Nombre: ${data.equipment_model.name}\n`;
+                        html += `   Tipo: ${data.equipment_model.type}\n`;
+                        html += `   Descripción: ${data.equipment_model.description}\n`;
+                        html += `   Imagen: ${data.equipment_model.image}\n`;
+                        html += `   Especificaciones: ${JSON.stringify(data.equipment_model.specifications, null, 2)}\n\n`;
+                    } else {
+                        html += `⚠️ No hay información del modelo asociado\n\n`;
+                    }
+                    
+                    if (data.aroma) {
+                        html += `🌸 Aroma Asignado:\n`;
+                        html += `   Nombre: ${data.aroma.name}\n`;
+                        html += `   Categoría: ${data.aroma.category}\n`;
+                        html += `   Notas: ${data.aroma.notes.join(', ')}\n`;
+                    }
+                    
+                    resultDiv.textContent = html;
+                    resultDiv.parentElement.className = 'test-section success';
+                } else {
+                    resultDiv.textContent = `❌ Error: ${data.error || 'Error desconocido'}`;
+                    resultDiv.parentElement.className = 'test-section error';
+                }
+            } catch (error) {
+                resultDiv.textContent = `❌ Error de conexión: ${error.message}`;
+                resultDiv.parentElement.className = 'test-section error';
+            }
+        }
+
+        async function testFormWithNewData() {
+            const resultDiv = document.getElementById('form-result');
+            resultDiv.textContent = 'Probando formulario con nuevos datos...';
+            
+            try {
+                // Simular carga de datos del formulario
+                const equipmentResponse = await fetch(`${API_BASE_URL}/equipment/1`);
+                const equipmentData = await equipmentResponse.json();
+                
+                if (equipmentResponse.ok) {
+                    let html = `✅ Formulario cargado correctamente:\n\n`;
+                    html += `📱 Datos del Equipo:\n`;
+                    html += `   ID: ${equipmentData.id}\n`;
+                    html += `   Modelo: ${equipmentData.model}\n`;
+                    html += `   Ubicación: ${equipmentData.location}\n\n`;
+                    
+                    if (equipmentData.equipment_model) {
+                        html += `🔧 Datos del Modelo:\n`;
+                        html += `   Nombre: ${equipmentData.equipment_model.name}\n`;
+                        html += `   Descripción: ${equipmentData.equipment_model.description}\n`;
+                        html += `   Tipo: ${equipmentData.equipment_model.type}\n`;
+                        html += `   Imagen: ${equipmentData.equipment_model.image}\n\n`;
+                    }
+                    
+                    html += `🌸 Aroma Asignado:\n`;
+                    html += `   Nombre: ${equipmentData.aroma.name}\n`;
+                    html += `   Notas: ${equipmentData.aroma.notes.join(', ')}\n\n`;
+                    
+                    html += `✅ El formulario ahora puede mostrar:\n`;
+                    html += `   - Nombre del modelo desde equipment_models\n`;
+                    html += `   - Descripción del equipo\n`;
+                    html += `   - Especificaciones técnicas\n`;
+                    html += `   - Imagen del equipo\n`;
+                    
+                    resultDiv.textContent = html;
+                    resultDiv.parentElement.className = 'test-section success';
+                } else {
+                    resultDiv.textContent = `❌ Error cargando equipo: ${equipmentData.error}`;
+                    resultDiv.parentElement.className = 'test-section error';
+                }
+            } catch (error) {
+                resultDiv.textContent = `❌ Error: ${error.message}`;
+                resultDiv.parentElement.className = 'test-section error';
+            }
+        }
+
+        async function compareData() {
+            const resultDiv = document.getElementById('compare-result');
+            resultDiv.textContent = 'Comparando estructura de datos...';
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/equipment/1`);
+                const data = await response.json();
+                
+                if (response.ok) {
+                    let html = `📊 Comparación de Estructura de Datos:\n\n`;
+                    
+                    html += `🔴 ANTES (solo equipment):\n`;
+                    html += `   - model: "StudioAroma Pro 500"\n`;
+                    html += `   - type: "Ultrasónico"\n`;
+                    html += `   - location: "Av. Reforma 123..."\n\n`;
+                    
+                    html += `🟢 DESPUÉS (equipment + equipment_model):\n`;
+                    html += `   - model: "StudioAroma Pro 500" (legacy)\n`;
+                    html += `   - equipment_model.name: "StudioAroma Pro 500"\n`;
+                    html += `   - equipment_model.description: "Difusor ultrasónico profesional..."\n`;
+                    html += `   - equipment_model.image: "/images/equipment/pro-500.jpg"\n`;
+                    html += `   - equipment_model.specifications: {\n`;
+                    html += `       "capacidad": "500ml",\n`;
+                    html += `       "cobertura": "100m²",\n`;
+                    html += `       "funciones": ["Timer", "LED", "Humidificación"]\n`;
+                    html += `     }\n\n`;
+                    
+                    html += `✅ Beneficios:\n`;
+                    html += `   - Información más detallada del equipo\n`;
+                    html += `   - Especificaciones técnicas completas\n`;
+                    html += `   - Imágenes para mostrar en el formulario\n`;
+                    html += `   - Descripciones profesionales\n`;
+                    html += `   - Reutilización de modelos para múltiples equipos\n`;
+                    
+                    resultDiv.textContent = html;
+                    resultDiv.parentElement.className = 'test-section success';
+                } else {
+                    resultDiv.textContent = `❌ Error: ${data.error}`;
+                    resultDiv.parentElement.className = 'test-section error';
+                }
+            } catch (error) {
+                resultDiv.textContent = `❌ Error: ${error.message}`;
+                resultDiv.parentElement.className = 'test-section error';
+            }
+        }
+
+        // Cargar datos al iniciar
+        window.addEventListener('load', () => {
+            testGetEquipmentModels();
+        });
+    </script>
+</body>
+</html>

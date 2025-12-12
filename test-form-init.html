@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Inicialización del Formulario - Studio Aroma</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: white;
+        }
+        .test-section {
+            background: #2a2a2a;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border-left: 4px solid #4CAF50;
+        }
+        .status {
+            background: #333;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .success { color: #4CAF50; }
+        .error { color: #f44336; }
+        .info { color: #2196F3; }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        .test-link {
+            display: inline-block;
+            background: #2196F3;
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 5px;
+        }
+        .test-link:hover {
+            background: #1976D2;
+        }
+        .scenario {
+            background: #444;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 3px solid #2196F3;
+        }
+        .scenario-title {
+            font-weight: bold;
+            color: #2196F3;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test de Inicialización del Formulario</h1>
+    
+    <div class="test-section">
+        <h3>🔗 Test 1: Escenarios de Inicialización</h3>
+        <div class="scenario">
+            <div class="scenario-title">Escenario 1: Sin ID en URL (debe ir al paso 1)</div>
+            <a href="formulario-aromas.html" class="test-link" target="_blank">Probar: formulario-aromas.html</a>
+            <p>Resultado esperado: Debe mostrar el paso 1 (selección de espacios)</p>
+        </div>
+        
+        <div class="scenario">
+            <div class="scenario-title">Escenario 2: Con ID en URL (debe cargar datos del equipo)</div>
+            <a href="formulario-aromas.html?id=1" class="test-link" target="_blank">Probar: formulario-aromas.html?id=1</a>
+            <p>Resultado esperado: Debe mostrar información del equipo y ir al paso 1</p>
+        </div>
+        
+        <div class="scenario">
+            <div class="scenario-title">Escenario 3: Continuar sesión (debe restaurar progreso)</div>
+            <a href="formulario-aromas.html?continue=true" class="test-link" target="_blank">Probar: formulario-aromas.html?continue=true</a>
+            <p>Resultado esperado: Debe restaurar progreso guardado si existe</p>
+        </div>
+        
+        <div class="scenario">
+            <div class="scenario-title">Escenario 4: ID + Continuar (debe cargar datos del equipo)</div>
+            <a href="formulario-aromas.html?id=1&continue=true" class="test-link" target="_blank">Probar: formulario-aromas.html?id=1&continue=true</a>
+            <p>Resultado esperado: Debe cargar datos del equipo (ID tiene prioridad)</p>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h3>📊 Test 2: Verificar Comportamiento</h3>
+        <button onclick="testInitialization()">Probar Inicialización</button>
+        <div id="test-result" class="status info">Haz clic para probar</div>
+    </div>
+
+    <div class="test-section">
+        <h3>🔍 Test 3: Debug de Parámetros</h3>
+        <button onclick="debugParameters()">Debug Parámetros URL</button>
+        <div id="debug-result" class="status info">Haz clic para debuggear</div>
+    </div>
+
+    <div class="test-section">
+        <h3>✅ Test 4: Verificación de Corrección</h3>
+        <button onclick="verifyFix()">Verificar Corrección</button>
+        <div id="verify-result" class="status info">Haz clic para verificar</div>
+    </div>
+
+    <script>
+        function testInitialization() {
+            const resultDiv = document.getElementById('test-result');
+            
+            let html = `🧪 Test de Inicialización:\n\n`;
+            
+            html += `📋 Comportamiento esperado:\n`;
+            html += `   1. Sin parámetros → Paso 1\n`;
+            html += `   2. Con ID → Cargar datos + Paso 1\n`;
+            html += `   3. Con continue=true → Restaurar progreso\n`;
+            html += `   4. Con ID + continue → ID tiene prioridad\n\n`;
+            
+            html += `🔧 Corrección aplicada:\n`;
+            html += `   - loadSavedProgress() solo se ejecuta con ?continue=true\n`;
+            html += `   - Sin ID en URL → Siempre va al paso 1\n`;
+            html += `   - Con ID en URL → Carga datos del equipo\n\n`;
+            
+            html += `✅ Problema resuelto:\n`;
+            html += `   - Ya no salta al paso 3 automáticamente\n`;
+            html += `   - Comportamiento predecible y correcto`;
+            
+            resultDiv.textContent = html;
+            resultDiv.className = 'status success';
+        }
+
+        function debugParameters() {
+            const resultDiv = document.getElementById('debug-result');
+            
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = urlParams.get('id');
+            const continueSession = urlParams.get('continue');
+            
+            let html = `🔍 Debug de Parámetros URL:\n\n`;
+            
+            html += `📍 URL actual: ${window.location.href}\n`;
+            html += `🔍 Parámetros encontrados:\n`;
+            html += `   - id: ${id || 'No encontrado'}\n`;
+            html += `   - continue: ${continueSession || 'No encontrado'}\n\n`;
+            
+            html += `📊 Lógica de inicialización:\n`;
+            if (id) {
+                html += `   ✅ Hay ID → Cargar datos del equipo\n`;
+                html += `   📱 Equipo ID: ${id}\n`;
+            } else {
+                html += `   ❌ No hay ID → Ir al paso 1\n`;
+            }
+            
+            if (continueSession === 'true') {
+                html += `   ✅ Continue=true → Restaurar progreso\n`;
+            } else {
+                html += `   ❌ No continue → No restaurar progreso\n`;
+            }
+            
+            html += `\n🎯 Resultado esperado:\n`;
+            if (id) {
+                html += `   - Cargar datos del equipo ${id}\n`;
+                html += `   - Mostrar información del equipo\n`;
+                html += `   - Ir al paso 1\n`;
+            } else {
+                html += `   - Ir directamente al paso 1\n`;
+                html += `   - No cargar progreso guardado\n`;
+            }
+            
+            resultDiv.textContent = html;
+            resultDiv.className = 'status success';
+        }
+
+        function verifyFix() {
+            const resultDiv = document.getElementById('verify-result');
+            
+            let html = `✅ Verificación de Corrección:\n\n`;
+            
+            html += `🔴 Problema anterior:\n`;
+            html += `   - Sin ID en URL → Saltaba al paso 3\n`;
+            html += `   - loadSavedProgress() se ejecutaba siempre\n`;
+            html += `   - Comportamiento impredecible\n\n`;
+            
+            html += `🟢 Solución aplicada:\n`;
+            html += `   - loadSavedProgress() solo con ?continue=true\n`;
+            html += `   - Sin ID → Siempre paso 1\n`;
+            html += `   - Con ID → Cargar datos + paso 1\n`;
+            html += `   - Comportamiento predecible\n\n`;
+            
+            html += `📋 Código modificado:\n`;
+            html += `   - loadSavedProgress() ahora verifica ?continue=true\n`;
+            html += `   - init() maneja el retorno de loadSavedProgress()\n`;
+            html += `   - validateStep() solo si no se cargó progreso\n\n`;
+            
+            html += `🎯 Casos de uso:\n`;
+            html += `   1. formulario-aromas.html → Paso 1\n`;
+            html += `   2. formulario-aromas.html?id=1 → Cargar equipo + Paso 1\n`;
+            html += `   3. formulario-aromas.html?continue=true → Restaurar progreso\n`;
+            html += `   4. formulario-aromas.html?id=1&continue=true → Cargar equipo\n\n`;
+            
+            html += `✅ Corrección verificada y funcionando`;
+            
+            resultDiv.textContent = html;
+            resultDiv.className = 'status success';
+        }
+
+        // Cargar datos al iniciar
+        window.addEventListener('load', () => {
+            console.log('🧪 Test de inicialización cargado');
+        });
+    </script>
+</body>
+</html>

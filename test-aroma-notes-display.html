@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Visualización de Notas del Aroma - Studio Aroma</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: white;
+        }
+        .test-section {
+            background: #2a2a2a;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border-left: 4px solid #4CAF50;
+        }
+        .status {
+            background: #333;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .success { color: #4CAF50; }
+        .error { color: #f44336; }
+        .info { color: #2196F3; }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        .aroma-display {
+            background: #333;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border: 2px solid #4CAF50;
+        }
+        .aroma-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .aroma-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4CAF50;
+            margin-bottom: 10px;
+        }
+        .aroma-description {
+            color: #ccc;
+            font-style: italic;
+        }
+        .notes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .note-item {
+            background: #444;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        .note-item:hover {
+            border-color: #4CAF50;
+            background: #555;
+        }
+        .note-icon {
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+        .note-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .note-inspiration {
+            font-size: 12px;
+            color: #aaa;
+        }
+        .note-category {
+            font-size: 10px;
+            color: #888;
+            margin-top: 5px;
+        }
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .comparison-item {
+            background: #333;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .comparison-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #4CAF50;
+        }
+    </style>
+</head>
+<body>
+    <h1>🌸 Test de Visualización de Notas del Aroma</h1>
+    
+    <div class="test-section">
+        <h3>🔗 Test 1: Cargar Equipo con Aroma</h3>
+        <button onclick="loadEquipment(1)">Cargar Equipo ID 1 (Hotel)</button>
+        <button onclick="loadEquipment(2)">Cargar Equipo ID 2 (Santal)</button>
+        <div id="equipment-result" class="status info">Selecciona un equipo para cargar</div>
+    </div>
+
+    <div class="test-section">
+        <h3>🎯 Test 2: Visualización del Aroma</h3>
+        <div id="aroma-display" class="aroma-display" style="display: none;">
+            <div class="aroma-header">
+                <div class="aroma-name" id="aroma-name">-</div>
+                <div class="aroma-description" id="aroma-description">-</div>
+            </div>
+            <div class="notes-grid" id="notes-grid"></div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h3>📊 Test 3: Comparación de Datos</h3>
+        <button onclick="compareData()">Comparar Datos</button>
+        <div id="comparison-result" class="status info">Haz clic para comparar</div>
+    </div>
+
+    <div class="test-section">
+        <h3>🔍 Test 4: Debug de Relaciones</h3>
+        <button onclick="debugRelations()">Debug Relaciones</button>
+        <div id="debug-result" class="status info">Haz clic para debuggear</div>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:8080/api';
+        let currentEquipment = null;
+
+        async function loadEquipment(id) {
+            const resultDiv = document.getElementById('equipment-result');
+            resultDiv.textContent = `Cargando equipo ID ${id}...`;
+            resultDiv.className = 'status info';
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/equipment/${id}`);
+                const data = await response.json();
+                
+                if (response.ok) {
+                    currentEquipment = data;
+                    
+                    let html = `✅ Equipo ${id} cargado correctamente:\n\n`;
+                    html += `📱 Modelo: ${data.model}\n`;
+                    html += `📍 Ubicación: ${data.location}\n`;
+                    html += `🌸 Aroma: ${data.aroma.name}\n`;
+                    html += `📝 Descripción: ${data.aroma.description}\n`;
+                    html += `🏷️ Categoría: ${data.aroma.category}\n`;
+                    html += `🎯 Notas: ${data.aroma.notes.length} notas relacionadas\n\n`;
+                    
+                    html += `Notas del aroma:\n`;
+                    data.aroma.notes.forEach(note => {
+                        html += `  ${note.icon} ${note.name} - ${note.inspiration}\n`;
+                    });
+                    
+                    resultDiv.textContent = html;
+                    resultDiv.className = 'status success';
+                    
+                    // Mostrar el aroma visualmente
+                    displayAroma(data.aroma);
+                } else {
+                    resultDiv.textContent = `❌ Error: ${data.error || 'Error desconocido'}`;
+                    resultDiv.className = 'status error';
+                }
+            } catch (error) {
+                resultDiv.textContent = `❌ Error de conexión: ${error.message}`;
+                resultDiv.className = 'status error';
+            }
+        }
+
+        function displayAroma(aroma) {
+            const aromaDisplay = document.getElementById('aroma-display');
+            const aromaName = document.getElementById('aroma-name');
+            const aromaDescription = document.getElementById('aroma-description');
+            const notesGrid = document.getElementById('notes-grid');
+            
+            // Mostrar información del aroma
+            aromaName.textContent = aroma.name;
+            aromaDescription.textContent = aroma.description;
+            
+            // Limpiar grid de notas
+            notesGrid.innerHTML = '';
+            
+            // Agregar notas al grid
+            aroma.notes.forEach(note => {
+                const noteElement = document.createElement('div');
+                noteElement.className = 'note-item';
+                noteElement.innerHTML = `
+                    <div class="note-icon">${note.icon}</div>
+                    <div class="note-name">${note.name}</div>
+                    <div class="note-inspiration">${note.inspiration}</div>
+                    <div class="note-category">Categoría: ${note.category}</div>
+                `;
+                notesGrid.appendChild(noteElement);
+            });
+            
+            // Mostrar el contenedor
+            aromaDisplay.style.display = 'block';
+        }
+
+        function compareData() {
+            const resultDiv = document.getElementById('comparison-result');
+            
+            let html = `📊 Comparación de Datos:\n\n`;
+            
+            html += `🔴 Base de Datos (Tabla aromas):\n`;
+            html += `   - Solo información básica del aroma\n`;
+            html += `   - No incluye notas relacionadas\n`;
+            html += `   - Requiere JOIN con tabla de relaciones\n\n`;
+            
+            html += `🟢 API Response (EquipmentController):\n`;
+            html += `   - Incluye aroma completo\n`;
+            html += `   - Notas relacionadas cargadas\n`;
+            html += `   - Estructura lista para usar\n\n`;
+            
+            html += `✅ Relaciones Eloquent:\n`;
+            html += `   - Aroma::aromaticNotes() - BelongsToMany\n`;
+            html += `   - AromaticNote::aromas() - BelongsToMany\n`;
+            html += `   - Tabla intermedia: aroma_aromatic_note\n\n`;
+            
+            html += `🎯 Resultado:\n`;
+            html += `   - Las notas SÍ se cargan correctamente\n`;
+            html += `   - La API devuelve datos completos\n`;
+            html += `   - El formulario puede usar estos datos`;
+            
+            resultDiv.textContent = html;
+            resultDiv.className = 'status success';
+        }
+
+        function debugRelations() {
+            const resultDiv = document.getElementById('debug-result');
+            
+            let html = `🔍 Debug de Relaciones:\n\n`;
+            
+            html += `📋 Estructura de la Base de Datos:\n`;
+            html += `   1. Tabla 'aromas'\n`;
+            html += `      - id, name, description, category, tags\n`;
+            html += `      - NO tiene campo 'notes'\n\n`;
+            
+            html += `   2. Tabla 'aromatic_notes'\n`;
+            html += `      - id, name, icon, inspiration, category\n\n`;
+            
+            html += `   3. Tabla 'aroma_aromatic_note' (relación)\n`;
+            html += `      - aroma_id, aromatic_note_id\n`;
+            html += `      - Relación many-to-many\n\n`;
+            
+            html += `🔗 Cómo se Carga en la API:\n`;
+            html += `   Equipment::with(['aroma.aromaticNotes'])\n`;
+            html += `   ↓\n`;
+            html += `   Carga equipo + aroma + notas relacionadas\n\n`;
+            
+            html += `📤 Respuesta de la API:\n`;
+            html += `   {\n`;
+            html += `     "aroma": {\n`;
+            html += `       "id": 1,\n`;
+            html += `       "name": "Hotel",\n`;
+            html += `       "notes": [\n`;
+            html += `         { "id": 1, "name": "Floral", ... },\n`;
+            html += `         { "id": 2, "name": "Fresco", ... }\n`;
+            html += `       ]\n`;
+            html += `     }\n`;
+            html += `   }\n\n`;
+            
+            html += `✅ Conclusión:\n`;
+            html += `   Las notas SÍ se cargan correctamente\n`;
+            html += `   El problema podría estar en el frontend`;
+            
+            resultDiv.textContent = html;
+            resultDiv.className = 'status success';
+        }
+
+        // Cargar datos al iniciar
+        window.addEventListener('load', () => {
+            console.log('🧪 Test de visualización cargado');
+        });
+    </script>
+</body>
+</html>

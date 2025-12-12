@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Descubre tu Aroma Perfecto - Studio Aroma</title>
+    <link rel="stylesheet" href="formulario-aromas.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="images/logos/logo_studio_aroma-cropped.svg" alt="Studio Aroma" class="logo-img">
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="progress-steps">
+            <div class="step active" data-step="1">1</div>
+            <div class="step" data-step="2">2</div>
+            <div class="step" data-step="3">3</div>
+            <div class="step" data-step="4">4</div>
+            <div class="step" data-step="5">5</div>
+        </div>
+    </div>
+
+    <!-- Plan Info (shown when plan parameter is in URL) -->
+    <div class="plan-info-container" id="planInfoContainer" style="display: none;">
+        <div class="plan-info-card">
+            <div class="plan-info-content">
+                <h3 id="planInfoTitle"></h3>
+                <div class="plan-info-details" id="planInfoDetails"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Form Container -->
+    <div class="form-container">
+        <div class="form-wrapper">
+            <!-- Step 1: Welcome -->
+            <div class="step-content active" id="step1">
+                <div class="step-header">
+                    <h1>✨ Descubre tu Aroma Perfecto</h1>
+                    <p>Transforma tu espacio en una experiencia sensorial única. En solo 1 minuto, crearemos la solución de aromatización ideal para tu hogar o negocio.</p>
+                </div>
+                <div class="equipment-info" id="equipmentInfo" style="display: none;">
+                    <div class="equipment-card">
+                        <h3>📱 Información del Equipo</h3>
+                        <div class="equipment-content">
+                            <div class="equipment-image-container">
+                                <img id="equipmentImage" src="" alt="Imagen del equipo" class="equipment-image">
+                            </div>
+                            <div class="equipment-details">
+                                <p><strong>Modelo:</strong> <span id="equipmentModel">-</span></p>
+                                <p><strong>Ubicación:</strong> <span id="equipmentLocation">-</span></p>
+                                <p><strong>Instalado:</strong> <span id="equipmentDate">-</span></p>
+                                <p><strong>Descripción:</strong> <span id="equipmentDescription">-</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="step-actions">
+                    <button class="btn btn-primary" onclick="nextStep()">🌟 ¡Bienvenido a tu Viaje Sensorial!</button>
+                </div>
+            </div>
+
+            <!-- Step 2: Installation Type -->
+            <div class="step-content" id="step2">
+                <div class="step-header">
+                    <h2>🏢 ¿Dónde crearás tu oasis aromático?</h2>
+                    <p>Esto nos ayuda a darte una recomendación más precisa.</p>
+                </div>
+                <div class="options-grid">
+                    <div class="option-card" data-value="oficina">
+                        <div class="option-icon">🏢</div>
+                        <h3>Oficina</h3>
+                        <p>Espacios de trabajo profesionales</p>
+                    </div>
+                    <div class="option-card" data-value="casa">
+                        <div class="option-icon">🏠</div>
+                        <h3>Casa</h3>
+                        <p>Hogares y residencias</p>
+                    </div>
+                    <div class="option-card" data-value="otro">
+                        <div class="option-icon">🏪</div>
+                        <h3>Otro</h3>
+                        <p>Otros espacios comerciales</p>
+                    </div>
+                </div>
+                <div class="step-actions">
+                    <button class="btn btn-secondary" onclick="prevStep()">Regresar</button>
+                    <button class="btn btn-primary" onclick="nextStep()" disabled>Continuar</button>
+                </div>
+            </div>
+
+            <!-- Step 3: Preferred Aromas -->
+            <div class="step-content" id="step3">
+                <div class="step-header">
+                    <h2>🌸 Selecciona tus Notas Aromáticas Favoritas</h2>
+                    <p>Elige las notas que más te gusten. Puedes seleccionar varias o "No estoy seguro".</p>
+                </div>
+                <div class="aromas-grid" id="aromasGrid">
+                    <!-- Aromas will be loaded dynamically -->
+                </div>
+                <div class="step-actions">
+                    <button class="btn btn-secondary" onclick="prevStep()">Regresar</button>
+                    <button class="btn btn-primary" onclick="nextStep()" disabled>Continuar</button>
+                </div>
+            </div>
+
+            <!-- Step 4: Spaces Configuration -->
+            <div class="step-content" id="step4">
+                <div class="step-header">
+                    <h2>🏢 Configura tus Espacios</h2>
+                    <p>Agrega cada espacio que quieres aromatizar. Puedes agregar múltiples espacios.</p>
+                </div>
+                
+                <div class="spaces-container" id="spacesContainer">
+                    <!-- Los espacios se agregarán dinámicamente aquí -->
+                </div>
+                
+                <div class="add-space-section">
+                    <button class="btn btn-secondary" id="addSpaceBtn" onclick="addSpace()">
+                        <i class="fas fa-plus"></i> Agregar Otro Espacio
+                    </button>
+                </div>
+                
+                <div class="step-actions">
+                    <button class="btn btn-secondary" onclick="prevStep()">Regresar</button>
+                    <button class="btn btn-primary" onclick="nextStep()" disabled>Continuar</button>
+                </div>
+            </div>
+
+            <!-- Step 5: Contact Information -->
+            <div class="step-content" id="step5">
+                <div class="step-header">
+                    <h2>📝 Información de Contacto</h2>
+                    <p>Comparte tus datos para enviarte tu propuesta personalizada y darte seguimiento.</p>
+                </div>
+                <div class="contact-form-container">
+                    <div class="form-group">
+                        <label for="userName">👋 Nombre completo</label>
+                        <input type="text" id="userName" placeholder="Tu nombre completo" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="userEmail">📧 Correo electrónico</label>
+                        <input type="email" id="userEmail" placeholder="tu@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="userPhone">📱 Número de teléfono</label>
+                        <input type="tel" id="userPhone" placeholder="+52 55 1234 5678" required>
+                    </div>
+                </div>
+                <div class="step-actions">
+                    <button class="btn btn-secondary" onclick="prevStep()">Regresar</button>
+                    <button class="btn btn-primary" onclick="submitForm()">✨ Crear mi Experiencia</button>
+                </div>
+            </div>
+
+            <!-- Results Step -->
+            <div class="step-content" id="results">
+                <div class="step-header">
+                    <h2>🎉 ¡Tu Experiencia Personalizada Está Lista!</h2>
+                    <p>Basado en tus respuestas, hemos creado la solución perfecta para ti.</p>
+                </div>
+                <div class="recommendation-card" id="recommendationCard">
+                    <!-- Recommendation will be generated here -->
+                </div>
+                <div class="step-actions">
+                    <button class="btn btn-primary" onclick="window.location.href='index.html'">Ir al Inicio</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <h3>Creando tu experiencia sensorial...</h3>
+            <p>Estamos procesando tu información</p>
+        </div>
+    </div>
+
+    <!-- Success/Error Messages -->
+    <div class="message-overlay" id="messageOverlay">
+        <div class="message-content">
+            <div class="message-icon" id="messageIcon"></div>
+            <h3 id="messageTitle"></h3>
+            <p id="messageText"></p>
+            <button class="btn btn-primary" onclick="closeMessage()">Entendido</button>
+        </div>
+    </div>
+
+    <script src="formulario-aromas.js"></script>
+</body>
+</html>

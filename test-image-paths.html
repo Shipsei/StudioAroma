@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Rutas de Imágenes - Studio Aroma</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: white;
+        }
+        .test-section {
+            background: #2a2a2a;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border-left: 4px solid #4CAF50;
+        }
+        .equipment-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: left;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .equipment-content {
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+        }
+        .equipment-image-container {
+            flex-shrink: 0;
+        }
+        .equipment-image {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .equipment-details {
+            flex: 1;
+        }
+        .equipment-details p {
+            margin-bottom: 0.5rem;
+            color: #cccccc;
+        }
+        .equipment-details strong {
+            color: #ffffff;
+        }
+        .status {
+            background: #333;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-family: monospace;
+        }
+        .success { color: #4CAF50; }
+        .error { color: #f44336; }
+        .info { color: #2196F3; }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>🖼️ Test de Rutas de Imágenes</h1>
+    
+    <div class="test-section">
+        <h3>📱 Información del Equipo</h3>
+        <div class="equipment-card">
+            <h3>📱 Información del Equipo</h3>
+            <div class="equipment-content">
+                <div class="equipment-image-container">
+                    <img id="equipmentImage" src="" alt="Imagen del equipo" class="equipment-image">
+                </div>
+                <div class="equipment-details">
+                    <p><strong>Modelo:</strong> <span id="equipmentModel">-</span></p>
+                    <p><strong>Ubicación:</strong> <span id="equipmentLocation">-</span></p>
+                    <p><strong>Instalado:</strong> <span id="equipmentDate">-</span></p>
+                    <p><strong>Descripción:</strong> <span id="equipmentDescription">-</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h3>🔗 Test de Rutas</h3>
+        <button onclick="testImagePath('images/difusor_A1000/4.jpg')">Ruta Relativa</button>
+        <button onclick="testImagePath('/images/difusor_A1000/4.jpg')">Ruta desde Raíz</button>
+        <button onclick="testImagePath('4.jpg')">Solo Nombre</button>
+        <div id="status" class="status info">Haz clic en un botón para probar la ruta</div>
+    </div>
+
+    <div class="test-section">
+        <h3>📋 Recomendaciones</h3>
+        <ul>
+            <li><strong>✅ Ruta Relativa:</strong> <code>images/difusor_A1000/4.jpg</code></li>
+            <li><strong>✅ Ruta desde Raíz:</strong> <code>/images/difusor_A1000/4.jpg</code></li>
+            <li><strong>⚠️ Solo Nombre:</strong> Requiere lógica adicional en JavaScript</li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h3>💾 Almacenamiento en Base de Datos</h3>
+        <div class="status">
+<strong>Recomendado:</strong> Almacenar rutas relativas
+<code>images/difusor_A1000/4.jpg</code>
+
+<strong>Ventajas:</strong>
+- Portabilidad entre entornos
+- Fácil de mantener
+- Compatible con file:// y http://
+- No depende de rutas absolutas
+
+<strong>Ejemplo en Laravel:</strong>
+EquipmentModel::create([
+    'name' => 'A1000',
+    'image' => 'images/difusor_A1000/4.jpg',
+    'description' => '...'
+]);
+        </div>
+    </div>
+
+    <script>
+        function testImagePath(imagePath) {
+            const statusDiv = document.getElementById('status');
+            const equipmentImage = document.getElementById('equipmentImage');
+            
+            statusDiv.textContent = `Probando ruta: ${imagePath}`;
+            statusDiv.className = 'status info';
+            
+            // Simular datos del equipo
+            document.getElementById('equipmentModel').textContent = 'A1000';
+            document.getElementById('equipmentLocation').textContent = 'Av. Reforma 123, Col. Juárez, CDMX';
+            document.getElementById('equipmentDate').textContent = '14/1/2024';
+            document.getElementById('equipmentDescription').textContent = 'Difusor ultrasónico profesional de alta capacidad para espacios grandes';
+            
+            // Probar la imagen
+            equipmentImage.src = imagePath;
+            equipmentImage.style.display = 'block';
+            
+            equipmentImage.onload = () => {
+                statusDiv.textContent = `✅ Imagen cargada correctamente: ${imagePath}`;
+                statusDiv.className = 'status success';
+                console.log('✅ Imagen cargada:', imagePath);
+            };
+            
+            equipmentImage.onerror = () => {
+                statusDiv.textContent = `❌ Error cargando imagen: ${imagePath}`;
+                statusDiv.className = 'status error';
+                equipmentImage.style.display = 'none';
+                console.error('❌ Error cargando imagen:', imagePath);
+            };
+        }
+
+        // Cargar datos al iniciar
+        window.addEventListener('load', () => {
+            testImagePath('images/difusor_A1000/4.jpg');
+        });
+    </script>
+</body>
+</html>

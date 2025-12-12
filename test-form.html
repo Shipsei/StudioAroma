@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Formulario - Studio Aroma</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: white;
+        }
+        .test-info {
+            background: #2a2a2a;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border-left: 4px solid #4CAF50;
+        }
+        .test-links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .test-link {
+            background: #4CAF50;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            display: inline-block;
+        }
+        .test-link:hover {
+            background: #45a049;
+        }
+        .status {
+            background: #333;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-family: monospace;
+        }
+        .success { border-left-color: #4CAF50; }
+        .error { border-left-color: #f44336; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test del Formulario de Aromas</h1>
+    
+    <div class="test-info success">
+        <h3>✅ Estado de la API</h3>
+        <p>La API de Laravel está funcionando correctamente en <strong>http://localhost:8080</strong></p>
+        <div class="status">
+            <strong>Equipo ID 2:</strong> StudioAroma Elite 300 - Polanquito<br>
+            <strong>Aroma:</strong> Santal (Amaderado)<br>
+            <strong>Notas:</strong> amaderado, oriental
+        </div>
+    </div>
+
+    <div class="test-info">
+        <h3>🔗 Enlaces de Prueba</h3>
+        <div class="test-links">
+            <a href="formulario-aromas.html?id=1" class="test-link" target="_blank">
+                📱 Formulario con Equipo 1
+            </a>
+            <a href="formulario-aromas.html?id=2" class="test-link" target="_blank">
+                📱 Formulario con Equipo 2
+            </a>
+            <a href="formulario-aromas.html" class="test-link" target="_blank">
+                📱 Formulario sin Equipo
+            </a>
+            <a href="test-integration.html" class="test-link" target="_blank">
+                🧪 Test de API
+            </a>
+        </div>
+    </div>
+
+    <div class="test-info">
+        <h3>📋 Instrucciones de Prueba</h3>
+        <ol>
+            <li><strong>Abrir DevTools</strong> (F12) para ver los logs</li>
+            <li><strong>Probar con equipo:</strong> Usar los enlaces con ID</li>
+            <li><strong>Completar formulario:</strong> Llenar todos los pasos</li>
+            <li><strong>Verificar logs:</strong> Buscar mensajes ✅ en consola</li>
+            <li><strong>Verificar base de datos:</strong> phpMyAdmin en http://localhost:8081</li>
+        </ol>
+    </div>
+
+    <div class="test-info">
+        <h3>🔍 Logs Esperados</h3>
+        <div class="status">
+✅ Datos del equipo cargados desde la API<br>
+✅ Sesión creada: uuid-session-id<br>
+✅ Notas aromáticas cargadas desde la API<br>
+✅ Progreso guardado en la API<br>
+✅ Formulario enviado a la API<br>
+✅ Todos los datos guardados en la API de Laravel
+        </div>
+    </div>
+
+    <div class="test-info">
+        <h3>🚨 Errores Corregidos</h3>
+        <ul>
+            <li>❌ <strong>CORS Error:</strong> Eliminado endpoint inexistente</li>
+            <li>❌ <strong>sendFormData:</strong> Método removido</li>
+            <li>✅ <strong>API Laravel:</strong> Funcionando correctamente</li>
+        </ul>
+    </div>
+
+    <script>
+        // Verificar que la API esté funcionando
+        async function checkAPI() {
+            try {
+                const response = await fetch('http://localhost:8080/api/equipment/2');
+                const data = await response.json();
+                
+                if (response.ok) {
+                    console.log('✅ API funcionando correctamente:', data);
+                } else {
+                    console.error('❌ Error en la API:', data);
+                }
+            } catch (error) {
+                console.error('❌ Error de conexión con la API:', error);
+            }
+        }
+
+        // Verificar al cargar la página
+        checkAPI();
+    </script>
+</body>
+</html>

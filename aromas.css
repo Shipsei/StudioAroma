@@ -1,0 +1,430 @@
+/* Aromas Page Styles */
+
+/* Hero Section */
+.aromas-hero {
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    background: 
+        linear-gradient(135deg, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.7) 100%),
+        url('https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=1920&h=1080&fit=crop');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    position: relative;
+    overflow: hidden;
+    padding: 2rem 0;
+}
+
+.aromas-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.06) 0%, transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.04) 0%, transparent 35%);
+    background-size: 400% 400%;
+    opacity: 0.4;
+    pointer-events: none;
+    z-index: 1;
+    animation: vaporFlow 25s ease-in-out infinite alternate;
+}
+
+.aromas-hero .hero-content {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+}
+
+.aromas-hero h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+}
+
+.aromas-hero p {
+    font-size: 1.25rem;
+    color: #cccccc;
+    margin-bottom: 3rem;
+    line-height: 1.6;
+}
+
+.hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin-top: 2rem;
+}
+
+.stat {
+    text-align: center;
+}
+
+.stat-number {
+    display: block;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    font-size: 1rem;
+    color: #cccccc;
+    font-weight: 500;
+}
+
+/* Filter Section */
+.filter-section {
+    background: #0a0a0a;
+    padding: 2rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.filter-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.filter-tab {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #cccccc;
+    padding: 0.8rem 1.5rem;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.filter-tab:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+}
+
+.filter-tab.active {
+    background: #ffffff;
+    color: #000000;
+    border-color: #ffffff;
+}
+
+/* Aromas Section */
+.aromas-section {
+    background: #000000;
+    padding: 4rem 0;
+}
+
+.aromas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.aroma-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    overflow: hidden;
+    transition: opacity 0.4s ease, transform 0.4s ease, all 0.3s ease;
+    position: relative;
+}
+
+.aroma-card.hidden {
+    display: none !important;
+}
+
+.aroma-card.visible {
+    display: block !important;
+}
+
+.aroma-card:hover {
+    transform: translateY(-10px);
+    border-color: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.aroma-image {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+}
+
+.aroma-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.aroma-card:hover .aroma-image img {
+    transform: scale(1.1);
+}
+
+
+.aroma-content {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.aroma-content h3 {
+    color: #ffffff;
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    line-height: 1.3;
+}
+
+.aroma-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+    justify-content: flex-start;
+}
+
+.tag {
+    background: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.tag::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 100%);
+    border-radius: 20px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.aroma-card:hover .tag {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+.aroma-card:hover .tag::before {
+    opacity: 1;
+}
+
+.aroma-content p {
+    color: #cccccc;
+    line-height: 1.6;
+    margin: 0 0 1.5rem 0;
+    font-size: 0.9rem;
+}
+
+.btn-select-aroma {
+    background: linear-gradient(135deg, #ffffff 0%, #cccccc 100%);
+    color: #000000;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    margin-top: auto;
+}
+
+.btn-select-aroma:hover {
+    background: linear-gradient(135deg, #cccccc 0%, #ffffff 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+}
+
+/* CTA Section */
+.aromas-cta {
+    background: #0a0a0a;
+    padding: 4rem 0;
+    text-align: center;
+}
+
+.cta-content h2 {
+    color: #ffffff;
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.cta-content p {
+    color: #cccccc;
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.aromas-cta .btn {
+    background: linear-gradient(135deg, #ffffff 0%, #cccccc 100%);
+    color: #000000;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 1rem 2rem;
+    border-radius: 30px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+}
+
+.aromas-cta .btn.btn-secondary {
+    background: transparent;
+    color: #ffffff;
+    border: 2px solid #ffffff;
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+}
+
+.aromas-cta .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.3);
+}
+
+.aromas-cta .btn.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.2);
+}
+
+/* Active Navigation */
+.nav-link.active {
+    color: #ffffff;
+    font-weight: 600;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .aromas-hero h1 {
+        font-size: 2rem;
+    }
+    
+    .aromas-hero p {
+        font-size: 1rem;
+    }
+    
+    .hero-stats {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    
+    .stat-number {
+        font-size: 2rem;
+    }
+    
+    .filter-tabs {
+        gap: 0.5rem;
+    }
+    
+    .filter-tab {
+        padding: 0.6rem 1rem;
+        font-size: 0.8rem;
+    }
+    
+    .aromas-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .aroma-image {
+        height: 180px;
+    }
+    
+    .aroma-content {
+        padding: 1rem;
+    }
+    
+    .aroma-content h3 {
+        font-size: 1.1rem;
+    }
+    
+    .cta-content h2 {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .aromas-hero {
+        min-height: 50vh;
+        background-attachment: scroll;
+    }
+    
+    .hero-stats {
+        gap: 1rem;
+    }
+    
+    .stat-number {
+        font-size: 1.8rem;
+    }
+    
+    .stat-label {
+        font-size: 0.9rem;
+    }
+    
+    .filter-tab {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.75rem;
+    }
+    
+    .aroma-image {
+        height: 160px;
+    }
+    
+    .aroma-content h3 {
+        font-size: 1rem;
+    }
+    
+    .aroma-content p {
+        font-size: 0.85rem;
+    }
+    
+    .tag {
+        font-size: 0.65rem;
+        padding: 0.3rem 0.8rem;
+        letter-spacing: 0.6px;
+    }
+    
+    .aroma-tags {
+        gap: 0.4rem;
+    }
+}

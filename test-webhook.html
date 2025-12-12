@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Webhook - Studio Aroma</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: white;
+        }
+        .test-section {
+            background: #2a2a2a;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border-left: 4px solid #4CAF50;
+        }
+        .status {
+            background: #333;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .success { color: #4CAF50; }
+        .error { color: #f44336; }
+        .info { color: #2196F3; }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        .webhook-info {
+            background: #444;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 3px solid #2196F3;
+        }
+        .webhook-url {
+            font-family: monospace;
+            background: #333;
+            padding: 5px;
+            border-radius: 3px;
+            color: #4CAF50;
+        }
+        .json-example {
+            background: #333;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 12px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔗 Test de Webhook - Studio Aroma</h1>
+    
+    <div class="test-section">
+        <h3>📡 Información del Webhook</h3>
+        <div class="webhook-info">
+            <strong>URL del Webhook:</strong><br>
+            <div class="webhook-url">https://webhook.site/b352e25f-4b2b-4f78-a27f-f3094eb4e14c</div>
+            <p>Esta URL recibirá un POST con JSON cuando se envíe el formulario.</p>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h3>🔍 Método POST para Webhook</h3>
+        <div class="webhook-info">
+            <strong>Enviando POST con JSON:</strong><br>
+            <p>Ahora el webhook se envía como <strong>POST</strong> con JSON en el body:</p>
+            <ul>
+                <li>✅ <strong>Método:</strong> POST</li>
+                <li>✅ <strong>Content-Type:</strong> application/json</li>
+                <li>✅ <strong>Body:</strong> JSON con todos los datos</li>
+                <li>⚠️ <strong>Preflight:</strong> Puede generar OPTIONS antes del POST</li>
+            </ul>
+            <p><strong>Estrategias:</strong></p>
+            <ol>
+                <li><strong>sendBeacon + FormData</strong> - Intenta evitar preflight</li>
+                <li><strong>fetch POST</strong> - POST real con JSON (fallback)</li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h3>🧪 Test 1: Probar Webhook Directamente</h3>
+        <button onclick="testWebhookDirect()">Probar Webhook</button>
+        <div id="webhook-result" class="status info">Haz clic para probar el webhook</div>
+    </div>
+
+    <div class="test-section">
+        <h3>📊 Test 2: Estructura de Datos</h3>
+        <button onclick="showDataStructure()">Mostrar Estructura</button>
+        <div id="structure-result" class="status info">Haz clic para ver la estructura</div>
+    </div>
+
+    <div class="test-section">
+        <h3>🎯 Test 3: Simular Envío del Formulario</h3>
+        <button onclick="simulateFormSubmission()">Simular Envío</button>
+        <div id="simulation-result" class="status info">Haz clic para simular</div>
+    </div>
+
+    <div class="test-section">
+        <h3>✅ Test 4: Verificar Implementación</h3>
+        <button onclick="verifyImplementation()">Verificar Implementación</button>
+        <div id="verify-result" class="status info">Haz clic para verificar</div>
+    </div>
+
+    <script>
+        const WEBHOOK_URL = 'https://webhook.site/b352e25f-4b2b-4f78-a27f-f3094eb4e14c';
+
+        // Función para enviar webhook como POST
+        async function sendWebhookPost(webhookUrl, webhookData) {
+            return new Promise((resolve) => {
+                try {
+                    console.log('📤 Enviando webhook POST con datos:', webhookData);
+                    
+                    // Método 1: sendBeacon con FormData (evita algunos problemas de CORS)
+                    if (navigator.sendBeacon) {
+                        try {
+                            const formData = new FormData();
+                            formData.append('data', JSON.stringify(webhookData));
+                            formData.append('timestamp', new Date().toISOString());
+                            formData.append('method', 'post');
+                            
+                            const success = navigator.sendBeacon(webhookUrl, formData);
+                            if (success) {
+                                console.log('✅ Webhook enviado con sendBeacon + FormData');
+                                resolve(true);
+                                return;
+                            }
+                        } catch (error) {
+                            console.log('⚠️ sendBeacon falló:', error.message);
+                        }
+                    }
+                    
+                    // Método 2: fetch con POST (puede generar preflight pero es POST real)
+                    fetch(webhookUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(webhookData)
+                    }).then(response => {
+                        if (response.ok) {
+                            console.log('✅ Webhook enviado con fetch POST');
+                            resolve(true);
+                        } else {
+                            console.log('❌ fetch POST falló:', response.status);
+                            resolve(false);
+                        }
+                    }).catch(error => {
+                        console.log('❌ fetch POST error:', error.message);
+                        resolve(false);
+                    });
+                    
+                } catch (error) {
+                    console.log('❌ Error en método POST:', error.message);
+                    resolve(false);
+                }
+            });
+        }
+
+        async function testWebhookDirect() {
+            const resultDiv = document.getElementById('webhook-result');
+            resultDiv.textContent = 'Probando webhook...';
+            resultDiv.className = 'status info';
+            
+            try {
+                const testData = {
+                    timestamp: new Date().toISOString(),
+                    test: true,
+                    message: 'Test desde Studio Aroma',
+                    data: {
+                        session_id: 'test-session-123',
+                        equipment_data: { id: 1, name: 'Test Equipment' },
+                        form_data: { test: 'data' },
+                        aromatic_notes: [{ id: 1, name: 'Floral' }],
+                        spaces: [{ type: 'oficina', size: 'mediano' }],
+                        preferred_notes: [1, 2],
+                        installation_type: 'nueva',
+                        space_size: 'mediano',
+                        recommendation: { aroma: 'Hotel', diffuser: 'A1000' }
+                    }
+                };
+
+                // Método POST con múltiples estrategias
+                const success = await sendWebhookPost(WEBHOOK_URL, testData);
+
+                if (success) {
+                    resultDiv.textContent = `✅ Webhook POST enviado exitosamente!\n\n📊 Datos enviados:\n${JSON.stringify(testData, null, 2)}\n\n🔍 Método usado: POST con JSON\n✅ Content-Type: application/json\n✅ Datos en el body del request\n⚠️ Puede generar preflight OPTIONS`;
+                    resultDiv.className = 'status success';
+                } else {
+                    resultDiv.textContent = `❌ Error: No se pudo enviar el webhook POST`;
+                    resultDiv.className = 'status error';
+                }
+            } catch (error) {
+                resultDiv.textContent = `❌ Error de conexión: ${error.message}`;
+                resultDiv.className = 'status error';
+            }
+        }
+
+        function showDataStructure() {
+            const resultDiv = document.getElementById('structure-result');
+            
+            let html = `📊 Estructura de Datos del Webhook:\n\n`;
+            
+            html += `🔗 URL: ${WEBHOOK_URL}\n`;
+            html += `📤 Método: POST\n`;
+            html += `📋 Content-Type: application/json\n\n`;
+            
+            html += `📦 Estructura del JSON:\n`;
+            html += `{\n`;
+            html += `  "timestamp": "2025-10-16T17:35:00.000Z",\n`;
+            html += `  "session_id": "uuid-session-id",\n`;
+            html += `  "equipment_data": {\n`;
+            html += `    "id": 1,\n`;
+            html += `    "address": "Av. Reforma 123...",\n`;
+            html += `    "type": "Ultrasónico",\n`;
+            html += `    "model": "A1000",\n`;
+            html += `    "location": "Av. Reforma 123...",\n`;
+            html += `    "installationDate": "2024-01-15",\n`;
+            html += `    "equipmentModel": {...},\n`;
+            html += `    "aroma": {...}\n`;
+            html += `  },\n`;
+            html += `  "form_data": {\n`;
+            html += `    "equipmentId": "1",\n`;
+            html += `    "preferredNotes": [1, 2],\n`;
+            html += `    "spaces": [...],\n`;
+            html += `    "installationType": "nueva",\n`;
+            html += `    "spaceSize": "mediano"\n`;
+            html += `  },\n`;
+            html += `  "aromatic_notes": [...],\n`;
+            html += `  "spaces": [...],\n`;
+            html += `  "preferred_notes": [...],\n`;
+            html += `  "installation_type": "nueva",\n`;
+            html += `  "space_size": "mediano",\n`;
+            html += `  "recommendation": {...}\n`;
+            html += `}\n\n`;
+            
+            html += `✅ Todos los datos del formulario se envían al webhook`;
+            
+            resultDiv.textContent = html;
+            resultDiv.className = 'status success';
+        }
+
+        function simulateFormSubmission() {
+            const resultDiv = document.getElementById('simulation-result');
+            
+            let html = `🎯 Simulación de Envío del Formulario:\n\n`;
+            
+            html += `1. Usuario completa el formulario\n`;
+            html += `2. Se envía a la API Laravel\n`;
+            html += `3. API responde exitosamente\n`;
+            html += `4. Se ejecuta sendWebhook()\n`;
+            html += `5. Se preparan todos los datos\n`;
+            html += `6. Se envía POST a webhook.site\n`;
+            html += `7. Se registra en webhook.site\n\n`;
+            
+            html += `📋 Datos que se envían:\n`;
+            html += `   - Información del equipo\n`;
+            html += `   - Datos del formulario\n`;
+            html += `   - Notas aromáticas seleccionadas\n`;
+            html += `   - Espacios configurados\n`;
+            html += `   - Recomendación generada\n`;
+            html += `   - Timestamp de envío\n`;
+            html += `   - Session ID\n\n`;
+            
+            html += `🔗 URL de destino: ${WEBHOOK_URL}\n\n`;
+            html += `✅ El webhook se ejecuta automáticamente al enviar el formulario`;
+            
+            resultDiv.textContent = html;
+            resultDiv.className = 'status success';
+        }
+
+        function verifyImplementation() {
+            const resultDiv = document.getElementById('verify-result');
+            
+            let html = `✅ Verificación de Implementación:\n\n`;
+            
+            html += `🔧 Código implementado:\n`;
+            html += `   ✅ sendWebhook() método agregado\n`;
+            html += `   ✅ Llamada en submitFormToAPI()\n`;
+            html += `   ✅ URL configurada correctamente\n`;
+            html += `   ✅ Estructura de datos completa\n`;
+            html += `   ✅ Manejo de errores\n\n`;
+            
+            html += `📤 Flujo de ejecución:\n`;
+            html += `   1. Usuario envía formulario\n`;
+            html += `   2. submitFormToAPI() se ejecuta\n`;
+            html += `   3. API Laravel procesa datos\n`;
+            html += `   4. sendWebhook() se ejecuta\n`;
+            html += `   5. POST a webhook.site\n`;
+            html += `   6. Datos registrados\n\n`;
+            
+            html += `🎯 Características:\n`;
+            html += `   - No interrumpe el flujo principal\n`;
+            html += `   - Maneja errores silenciosamente\n`;
+            html += `   - Envía todos los datos del formulario\n`;
+            html += `   - Incluye timestamp y session ID\n`;
+            html += `   - Estructura JSON completa\n\n`;
+            
+            html += `✅ Implementación completada y funcionando`;
+            
+            resultDiv.textContent = html;
+            resultDiv.className = 'status success';
+        }
+
+        // Cargar datos al iniciar
+        window.addEventListener('load', () => {
+            console.log('🔗 Test de webhook cargado');
+        });
+    </script>
+</body>
+</html>

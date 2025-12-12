@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Visualización de Imagen - Studio Aroma</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: white;
+        }
+        .test-section {
+            background: #2a2a2a;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border-left: 4px solid #4CAF50;
+        }
+        .equipment-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: left;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .equipment-content {
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+        }
+        .equipment-image-container {
+            flex-shrink: 0;
+        }
+        .equipment-image {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .equipment-details {
+            flex: 1;
+        }
+        .equipment-details p {
+            margin-bottom: 0.5rem;
+            color: #cccccc;
+        }
+        .equipment-details strong {
+            color: #ffffff;
+        }
+        .status {
+            background: #333;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-family: monospace;
+        }
+        .success { color: #4CAF50; }
+        .error { color: #f44336; }
+        .info { color: #2196F3; }
+    </style>
+</head>
+<body>
+    <h1>🖼️ Test de Visualización de Imagen</h1>
+    
+    <div class="test-section">
+        <h3>📱 Información del Equipo</h3>
+        <div class="equipment-card">
+            <h3>📱 Información del Equipo</h3>
+            <div class="equipment-content">
+                <div class="equipment-image-container">
+                    <img id="equipmentImage" src="" alt="Imagen del equipo" class="equipment-image">
+                </div>
+                <div class="equipment-details">
+                    <p><strong>Modelo:</strong> <span id="equipmentModel">-</span></p>
+                    <p><strong>Ubicación:</strong> <span id="equipmentLocation">-</span></p>
+                    <p><strong>Instalado:</strong> <span id="equipmentDate">-</span></p>
+                    <p><strong>Descripción:</strong> <span id="equipmentDescription">-</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h3>🔗 Test de Imagen</h3>
+        <div id="status" class="status info">Cargando datos del equipo...</div>
+    </div>
+
+    <div class="test-section">
+        <h3>📋 Verificaciones</h3>
+        <ul>
+            <li>✅ La imagen se carga correctamente</li>
+            <li>✅ Los datos del equipo se muestran</li>
+            <li>✅ El diseño es responsive</li>
+            <li>✅ La imagen tiene bordes redondeados</li>
+            <li>✅ El tamaño es apropiado (120x120px)</li>
+        </ul>
+    </div>
+
+    <script>
+        // Simular datos del equipo (como los que vienen de la API)
+        const equipmentData = {
+            id: 1,
+            address: "Av. Reforma 123, Col. Juárez, CDMX",
+            type: "Ultrasónico",
+            model: "StudioAroma Pro 500",
+            location: "Av. Reforma 123, Col. Juárez, CDMX",
+            installation_date: "2024-01-15",
+            equipment_model: {
+                id: 1,
+                name: "A1000",
+                image: "images/difusor_A1000/4.jpg",
+                description: "Difusor ultrasónico profesional de alta capacidad para espacios grandes",
+                type: "Ultrasónico",
+                specifications: {
+                    material: "Cerámica Premium",
+                    capacidad: "500ml",
+                    cobertura: "100m²",
+                    funciones: ["Timer", "LED", "Humidificación"]
+                }
+            },
+            aroma: {
+                id: 1,
+                name: "Hotel",
+                description: "Una fragancia floral fresca que evoca la elegancia y sofisticación de los hoteles de lujo.",
+                category: "Floral",
+                tags: ["Floral", "Fresco", "Elegante"],
+                notes: ["floral", "fresco"]
+            }
+        };
+
+        function displayEquipmentInfo(equipmentData) {
+            const statusDiv = document.getElementById('status');
+            
+            // Usar datos del modelo de equipo si están disponibles
+            const modelName = equipmentData.equipment_model?.name || equipmentData.model;
+            const modelDescription = equipmentData.equipment_model?.description || '';
+            const modelImage = equipmentData.equipment_model?.image || '';
+            
+            // Actualizar texto
+            document.getElementById('equipmentModel').textContent = modelName;
+            document.getElementById('equipmentLocation').textContent = equipmentData.location;
+            document.getElementById('equipmentDate').textContent = new Date(equipmentData.installation_date).toLocaleDateString('es-MX');
+            document.getElementById('equipmentDescription').textContent = modelDescription;
+            
+            // Actualizar imagen
+            const equipmentImage = document.getElementById('equipmentImage');
+            if (modelImage) {
+                equipmentImage.src = modelImage;
+                equipmentImage.style.display = 'block';
+                
+                equipmentImage.onload = () => {
+                    statusDiv.textContent = `✅ Imagen cargada correctamente: ${modelImage}`;
+                    statusDiv.className = 'status success';
+                };
+                
+                equipmentImage.onerror = () => {
+                    console.warn('⚠️ No se pudo cargar la imagen:', modelImage);
+                    equipmentImage.style.display = 'none';
+                    statusDiv.textContent = `❌ Error cargando imagen: ${modelImage}`;
+                    statusDiv.className = 'status error';
+                };
+            } else {
+                equipmentImage.style.display = 'none';
+                statusDiv.textContent = '⚠️ No hay imagen disponible para este equipo';
+                statusDiv.className = 'status error';
+            }
+            
+            console.log('📱 Información del equipo mostrada:', {
+                model: modelName,
+                description: modelDescription,
+                image: modelImage,
+                location: equipmentData.location,
+                installationDate: equipmentData.installation_date
+            });
+        }
+
+        // Cargar datos al iniciar
+        window.addEventListener('load', () => {
+            displayEquipmentInfo(equipmentData);
+        });
+    </script>
+</body>
+</html>

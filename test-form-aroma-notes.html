@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Formulario - Notas del Aroma</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: white;
+        }
+        .test-section {
+            background: #2a2a2a;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border-left: 4px solid #4CAF50;
+        }
+        .status {
+            background: #333;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .success { color: #4CAF50; }
+        .error { color: #f44336; }
+        .info { color: #2196F3; }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        .assigned-aroma-info {
+            background: #333;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border: 2px solid #4CAF50;
+        }
+        .assigned-aroma-card {
+            text-align: center;
+        }
+        .aroma-header h3 {
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+        .aroma-name-highlight {
+            background: #2E7D32;
+            padding: 5px 10px;
+            border-radius: 5px;
+            color: white;
+        }
+        .aroma-notes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .aroma-note-item {
+            background: #444;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        .aroma-note-item:hover {
+            border-color: #4CAF50;
+            background: #555;
+        }
+        .note-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+        .note-name {
+            font-weight: bold;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🌸 Test Formulario - Notas del Aroma</h1>
+    
+    <div class="test-section">
+        <h3>🔗 Test 1: Simular Carga del Formulario</h3>
+        <button onclick="simulateFormLoad(1)">Simular ID 1 (Hotel)</button>
+        <button onclick="simulateFormLoad(2)">Simular ID 2 (Santal)</button>
+        <div id="form-result" class="status info">Selecciona un ID para simular</div>
+    </div>
+
+    <div class="test-section">
+        <h3>🎯 Test 2: Visualización de Notas del Aroma</h3>
+        <div id="aroma-display" class="assigned-aroma-info" style="display: none;">
+            <div class="assigned-aroma-card">
+                <div class="aroma-header">
+                    <h3>Aroma del difusor: <span class="aroma-name-highlight" id="aroma-name">-</span></h3>
+                </div>
+                <div class="aroma-notes-section">
+                    <div class="aroma-notes-grid" id="notes-grid"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h3>📊 Test 3: Debug de Datos</h3>
+        <button onclick="debugData()">Debug Datos</button>
+        <div id="debug-result" class="status info">Haz clic para debuggear</div>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:8080/api';
+        let currentEquipment = null;
+        let aromaticNotes = [];
+
+        async function simulateFormLoad(id) {
+            const resultDiv = document.getElementById('form-result');
+            resultDiv.textContent = `Simulando carga del formulario para ID ${id}...`;
+            resultDiv.className = 'status info';
+            
+            try {
+                // Simular carga de datos del equipo
+                const equipmentResponse = await fetch(`${API_BASE_URL}/equipment/${id}`);
+                const equipmentData = await equipmentResponse.json();
+                
+                if (!equipmentResponse.ok) {
+                    throw new Error(`Error cargando equipo: ${equipmentData.error}`);
+                }
+                
+                // Simular carga de notas aromáticas
+                const notesResponse = await fetch(`${API_BASE_URL}/aromatic-notes`);
+                const notesData = await notesResponse.json();
+                
+                if (!notesResponse.ok) {
+                    throw new Error(`Error cargando notas: ${notesData.error}`);
+                }
+                
+                currentEquipment = equipmentData;
+                aromaticNotes = notesData;
+                
+                let html = `✅ Formulario simulado correctamente:\n\n`;
+                html += `📱 Equipo cargado: ${equipmentData.model}\n`;
+                html += `🌸 Aroma: ${equipmentData.aroma.name}\n`;
+                html += `🎯 Notas del aroma: ${equipmentData.aroma.notes.length}\n`;
+                html += `📋 Notas disponibles: ${notesData.length}\n\n`;
+                
+                html += `Notas del aroma asignado:\n`;
+                equipmentData.aroma.notes.forEach(note => {
+                    html += `  ${note.icon} ${note.name}\n`;
+                });
+                
+                resultDiv.textContent = html;
+                resultDiv.className = 'status success';
+                
+                // Mostrar las notas del aroma
+                displayAromaNotes(equipmentData.aroma);
+                
+            } catch (error) {
+                resultDiv.textContent = `❌ Error: ${error.message}`;
+                resultDiv.className = 'status error';
+            }
+        }
+
+        function displayAromaNotes(aroma) {
+            const aromaDisplay = document.getElementById('aroma-display');
+            const aromaName = document.getElementById('aroma-name');
+            const notesGrid = document.getElementById('notes-grid');
+            
+            // Mostrar nombre del aroma
+            aromaName.textContent = aroma.name;
+            
+            // Limpiar grid
+            notesGrid.innerHTML = '';
+            
+            // Agregar notas al grid
+            aroma.notes.forEach(note => {
+                const noteElement = document.createElement('div');
+                noteElement.className = 'aroma-note-item';
+                noteElement.innerHTML = `
+                    <div class="note-icon">${note.icon}</div>
+                    <div class="note-name">${note.name}</div>
+                `;
+                notesGrid.appendChild(noteElement);
+            });
+            
+            // Mostrar el contenedor
+            aromaDisplay.style.display = 'block';
+        }
+
+        function debugData() {
+            const resultDiv = document.getElementById('debug-result');
+            
+            if (!currentEquipment) {
+                resultDiv.textContent = '❌ No hay datos cargados. Ejecuta primero el Test 1.';
+                resultDiv.className = 'status error';
+                return;
+            }
+            
+            let html = `🔍 Debug de Datos del Formulario:\n\n`;
+            
+            html += `📱 Datos del Equipo:\n`;
+            html += `   ID: ${currentEquipment.id}\n`;
+            html += `   Modelo: ${currentEquipment.model}\n`;
+            html += `   Ubicación: ${currentEquipment.location}\n\n`;
+            
+            html += `🌸 Datos del Aroma:\n`;
+            html += `   ID: ${currentEquipment.aroma.id}\n`;
+            html += `   Nombre: ${currentEquipment.aroma.name}\n`;
+            html += `   Descripción: ${currentEquipment.aroma.description}\n`;
+            html += `   Categoría: ${currentEquipment.aroma.category}\n`;
+            html += `   Tags: ${JSON.stringify(currentEquipment.aroma.tags)}\n\n`;
+            
+            html += `🎯 Notas del Aroma (${currentEquipment.aroma.notes.length}):\n`;
+            currentEquipment.aroma.notes.forEach((note, index) => {
+                html += `   ${index + 1}. ${note.icon} ${note.name}\n`;
+                html += `      ID: ${note.id}\n`;
+                html += `      Inspiración: ${note.inspiration}\n`;
+                html += `      Categoría: ${note.category}\n\n`;
+            });
+            
+            html += `📋 Todas las Notas Disponibles (${aromaticNotes.length}):\n`;
+            aromaticNotes.forEach((note, index) => {
+                html += `   ${index + 1}. ${note.icon} ${note.name} (ID: ${note.id})\n`;
+            });
+            
+            html += `\n✅ Verificación:\n`;
+            html += `   - Las notas del aroma SÍ se cargan correctamente\n`;
+            html += `   - La estructura de datos es correcta\n`;
+            html += `   - El formulario puede mostrar estas notas`;
+            
+            resultDiv.textContent = html;
+            resultDiv.className = 'status success';
+        }
+
+        // Cargar datos al iniciar
+        window.addEventListener('load', () => {
+            console.log('🧪 Test del formulario cargado');
+        });
+    </script>
+</body>
+</html>

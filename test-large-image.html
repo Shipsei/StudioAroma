@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Imagen Grande - Studio Aroma</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: white;
+        }
+        .test-section {
+            background: #2a2a2a;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border-left: 4px solid #4CAF50;
+        }
+        .equipment-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: left;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .equipment-content {
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+        }
+        .equipment-image-container {
+            flex-shrink: 0;
+        }
+        .equipment-image {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .equipment-details {
+            flex: 1;
+        }
+        .equipment-details p {
+            margin-bottom: 0.5rem;
+            color: #cccccc;
+        }
+        .equipment-details strong {
+            color: #ffffff;
+        }
+        .status {
+            background: #333;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-family: monospace;
+        }
+        .success { color: #4CAF50; }
+        .error { color: #f44336; }
+        .info { color: #2196F3; }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        .size-comparison {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .size-box {
+            background: #333;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .size-box h4 {
+            margin-bottom: 10px;
+            color: #4CAF50;
+        }
+        .size-box .image {
+            width: 120px;
+            height: 120px;
+            background: #555;
+            border-radius: 8px;
+            margin: 0 auto 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+        .size-box.large .image {
+            width: 200px;
+            height: 200px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🖼️ Test de Imagen Grande</h1>
+    
+    <div class="test-section">
+        <h3>📏 Comparación de Tamaños</h3>
+        <div class="size-comparison">
+            <div class="size-box">
+                <h4>Tamaño Anterior</h4>
+                <div class="image">120x120px</div>
+                <p>Pequeño</p>
+            </div>
+            <div class="size-box large">
+                <h4>Tamaño Nuevo</h4>
+                <div class="image">200x200px</div>
+                <p>Mucho más grande</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h3>📱 Información del Equipo</h3>
+        <div class="equipment-card">
+            <h3>📱 Información del Equipo</h3>
+            <div class="equipment-content">
+                <div class="equipment-image-container">
+                    <img id="equipmentImage" src="images/difusor_A1000/4.jpg" alt="Imagen del equipo" class="equipment-image">
+                </div>
+                <div class="equipment-details">
+                    <p><strong>Modelo:</strong> <span id="equipmentModel">A1000</span></p>
+                    <p><strong>Ubicación:</strong> <span id="equipmentLocation">Av. Reforma 123, Col. Juárez, CDMX</span></p>
+                    <p><strong>Instalado:</strong> <span id="equipmentDate">14/1/2024</span></p>
+                    <p><strong>Descripción:</strong> <span id="equipmentDescription">Difusor ultrasónico profesional de alta capacidad para espacios grandes</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h3>📱 Test Responsive</h3>
+        <button onclick="testResponsive()">Probar Responsive</button>
+        <div id="status" class="status info">Haz clic para probar el diseño responsive</div>
+    </div>
+
+    <div class="test-section">
+        <h3>✅ Cambios Realizados</h3>
+        <ul>
+            <li><strong>Imagen Desktop:</strong> 120x120px → 200x200px (+67% más grande)</li>
+            <li><strong>Imagen Móvil:</strong> 100x100px → 150x150px (+50% más grande)</li>
+            <li><strong>Tarjeta:</strong> max-width 500px → 700px</li>
+            <li><strong>Bordes:</strong> border-radius 12px → 16px</li>
+            <li><strong>Responsive:</strong> Mejorado para móviles</li>
+        </ul>
+    </div>
+
+    <script>
+        function testResponsive() {
+            const statusDiv = document.getElementById('status');
+            const equipmentCard = document.querySelector('.equipment-card');
+            const equipmentImage = document.getElementById('equipmentImage');
+            
+            // Simular cambio de tamaño de pantalla
+            if (window.innerWidth > 768) {
+                statusDiv.textContent = '📱 Pantalla Desktop: Imagen 200x200px, Layout horizontal';
+                statusDiv.className = 'status success';
+            } else {
+                statusDiv.textContent = '📱 Pantalla Móvil: Imagen 150x150px, Layout vertical';
+                statusDiv.className = 'status info';
+            }
+            
+            // Mostrar información de tamaño actual
+            const imageRect = equipmentImage.getBoundingClientRect();
+            console.log('📏 Tamaño actual de la imagen:', {
+                width: imageRect.width,
+                height: imageRect.height,
+                screenWidth: window.innerWidth
+            });
+        }
+
+        // Cargar datos al iniciar
+        window.addEventListener('load', () => {
+            testResponsive();
+        });
+
+        // Escuchar cambios de tamaño de ventana
+        window.addEventListener('resize', () => {
+            setTimeout(testResponsive, 100);
+        });
+    </script>
+</body>
+</html>

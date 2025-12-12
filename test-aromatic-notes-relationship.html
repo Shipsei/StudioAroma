@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Relación Notas Aromáticas - Studio Aroma</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: white;
+        }
+        .test-section {
+            background: #2a2a2a;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border-left: 4px solid #4CAF50;
+        }
+        .status {
+            background: #333;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .success { color: #4CAF50; }
+        .error { color: #f44336; }
+        .info { color: #2196F3; }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        .note-item {
+            background: #333;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .note-icon {
+            font-size: 20px;
+        }
+        .note-info {
+            flex: 1;
+        }
+        .note-name {
+            font-weight: bold;
+            color: #ffffff;
+        }
+        .note-inspiration {
+            color: #cccccc;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🌸 Test de Relación Notas Aromáticas</h1>
+    
+    <div class="test-section">
+        <h3>🔗 Test 1: Obtener Equipo con Notas Relacionadas</h3>
+        <button onclick="testEquipmentWithNotes(1)">Equipo ID 1</button>
+        <button onclick="testEquipmentWithNotes(2)">Equipo ID 2</button>
+        <div id="equipment-result" class="status info">Haz clic en un botón para cargar datos</div>
+    </div>
+
+    <div class="test-section">
+        <h3>📊 Comparación: Antes vs Después</h3>
+        <div id="comparison-result" class="status info">Cargando comparación...</div>
+    </div>
+
+    <div class="test-section">
+        <h3>✅ Beneficios de la Nueva Estructura</h3>
+        <ul>
+            <li><strong>✅ Relaciones correctas:</strong> Usa IDs en lugar de strings</li>
+            <li><strong>✅ Datos completos:</strong> Incluye icono, inspiración, categoría</li>
+            <li><strong>✅ Consultas eficientes:</strong> JOINs en lugar de arrays</li>
+            <li><strong>✅ Integridad referencial:</strong> Foreign keys</li>
+            <li><strong>✅ Escalabilidad:</strong> Fácil agregar nuevas notas</li>
+        </ul>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:8080/api';
+
+        async function testEquipmentWithNotes(id) {
+            const resultDiv = document.getElementById('equipment-result');
+            resultDiv.textContent = `Cargando equipo ID ${id}...`;
+            resultDiv.className = 'status info';
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/equipment/${id}`);
+                const data = await response.json();
+                
+                if (response.ok) {
+                    let html = `✅ Equipo ${id} cargado correctamente:\n\n`;
+                    html += `📱 Modelo: ${data.model}\n`;
+                    html += `📍 Ubicación: ${data.location}\n\n`;
+                    
+                    if (data.aroma) {
+                        html += `🌸 Aroma: ${data.aroma.name}\n`;
+                        html += `📝 Descripción: ${data.aroma.description}\n`;
+                        html += `🏷️ Categoría: ${data.aroma.category}\n\n`;
+                        
+                        html += `🎯 Notas Aromáticas (${data.aroma.notes.length}):\n`;
+                        data.aroma.notes.forEach(note => {
+                            html += `  ${note.icon} ${note.name} - ${note.inspiration}\n`;
+                        });
+                    }
+                    
+                    resultDiv.textContent = html;
+                    resultDiv.className = 'status success';
+                    
+                    // Mostrar notas en el DOM
+                    displayNotes(data.aroma.notes);
+                } else {
+                    resultDiv.textContent = `❌ Error: ${data.error || 'Error desconocido'}`;
+                    resultDiv.className = 'status error';
+                }
+            } catch (error) {
+                resultDiv.textContent = `❌ Error de conexión: ${error.message}`;
+                resultDiv.className = 'status error';
+            }
+        }
+
+        function displayNotes(notes) {
+            const notesContainer = document.getElementById('notes-container');
+            if (!notesContainer) {
+                const container = document.createElement('div');
+                container.id = 'notes-container';
+                container.innerHTML = '<h3>🎯 Notas Aromáticas del Aroma</h3>';
+                document.querySelector('.test-section').appendChild(container);
+            }
+            
+            const notesContainer = document.getElementById('notes-container');
+            notesContainer.innerHTML = '<h3>🎯 Notas Aromáticas del Aroma</h3>';
+            
+            notes.forEach(note => {
+                const noteElement = document.createElement('div');
+                noteElement.className = 'note-item';
+                noteElement.innerHTML = `
+                    <div class="note-icon">${note.icon}</div>
+                    <div class="note-info">
+                        <div class="note-name">${note.name}</div>
+                        <div class="note-inspiration">${note.inspiration}</div>
+                    </div>
+                `;
+                notesContainer.appendChild(noteElement);
+            });
+        }
+
+        function showComparison() {
+            const comparisonDiv = document.getElementById('comparison-result');
+            comparisonDiv.textContent = `📊 Comparación de Estructuras:
+
+🔴 ANTES (Campo 'notes' como array):
+{
+  "id": 1,
+  "name": "Hotel",
+  "notes": ["floral", "fresco"]  // ❌ Solo strings
+}
+
+🟢 DESPUÉS (Relación many-to-many):
+{
+  "id": 1,
+  "name": "Hotel",
+  "notes": [                    // ✅ Objetos completos
+    {
+      "id": 1,
+      "name": "Floral",
+      "icon": "🌸",
+      "inspiration": "Inspira frescura y elegancia",
+      "category": "Floral"
+    },
+    {
+      "id": 2,
+      "name": "Fresco",
+      "icon": "🌿",
+      "inspiration": "Evoca naturaleza y vitalidad",
+      "category": "Fresco"
+    }
+  ]
+}
+
+✅ Ventajas:
+- Datos completos de cada nota
+- Relaciones correctas con IDs
+- Consultas eficientes con JOINs
+- Integridad referencial
+- Escalabilidad mejorada`;
+            comparisonDiv.className = 'status success';
+        }
+
+        // Cargar datos al iniciar
+        window.addEventListener('load', () => {
+            showComparison();
+            testEquipmentWithNotes(1);
+        });
+    </script>
+</body>
+</html>

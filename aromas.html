@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de Aromas - Studio Aroma</title>
+    <meta name="description" content="Descubre nuestra exclusiva colección de 20 aromas premium diseñados por expertos perfumistas.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="aromas.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-container">
+                <div class="logo">
+                    <a href="index.html">
+                        <img src="images/logos/logo_studio_aroma-cropped.svg" alt="Studio Aroma" class="logo-img">
+                    </a>
+                </div>
+                <div class="nav-menu">
+                    <a href="index.html" class="nav-link">Inicio</a>
+                    <a href="aromas.html" class="nav-link active">Aromas</a>
+                    <a href="index.html#precios" class="nav-link">Planes</a>
+                    <a href="index.html#contacto" class="nav-link">Contacto</a>
+                </div>
+                <div class="nav-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="aromas-hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Catálogo de Aromas Premium</h1>
+                <p>Descubre nuestra exclusiva colección de 17 fragancias diseñadas por expertos perfumistas para crear experiencias olfativas únicas.</p>
+                <div class="hero-stats">
+                <div class="stat">
+                    <span class="stat-number">17</span>
+                    <span class="stat-label">Aromas Únicos</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">6</span>
+                    <span class="stat-label">Categorías</span>
+                </div>
+                    <div class="stat">
+                        <span class="stat-number">100%</span>
+                        <span class="stat-label">Premium</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filter Section -->
+    <section class="filter-section">
+        <div class="container">
+            <div class="filter-tabs">
+                <button class="filter-tab active" data-filter="all">Todos</button>
+                <button class="filter-tab" data-filter="citricos">Cítricos</button>
+                <button class="filter-tab" data-filter="florales">Florales</button>
+                <button class="filter-tab" data-filter="amaderados">Amaderados</button>
+                <button class="filter-tab" data-filter="frutales">Frutales</button>
+                <button class="filter-tab" data-filter="frescos">Frescos</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Aromas Grid -->
+    <section class="aromas-section">
+        <div class="container">
+            <div class="aromas-grid">
+                <!-- Aroma 1 -->
+                <div class="aroma-card" data-category="florales">
+                    <div class="aroma-image">
+                        <img src="https://images.unsplash.com/photo-1582794543139-8ac9cb0f7b11?w=400&h=300&fit=crop" alt="Hotel" loading="lazy">
+                    </div>
+                    <div class="aroma-content">
+                        <h3>Hotel</h3>
+                        <div class="aroma-tags">
+                            <span class="tag">Floral</span>
+                            <span class="tag">Fresco</span>
+                            <span class="tag">Elegante</span>
+                        </div>
+                        <p>Una fragancia floral fresca que evoca la elegancia y sofisticación de los hoteles de lujo.</p>
+                        <button class="btn-select-aroma" data-aroma="Hotel">¡Elegir Este!</button>
+                    </div>
+                </div>
+
+                <!-- Aroma 2 -->
+                <div class="aroma-card" data-category="amaderados">
+                    <div class="aroma-image">
+                        <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&h=300&fit=crop" alt="Santal" loading="lazy">
+                    </div>
+                    <div class="aroma-content">
+                        <h3>Santal</h3>
+                        <div class="aroma-tags">
+                            <span class="tag">Amaderado</span>
+                            <span class="tag">Profundo</span>
+                            <span class="tag">Espiritual</span>
+                        </div>
+                        <p>Una fragancia amaderada con notas de sándalo que evoca calma y espiritualidad.</p>
+                        <button class="btn-select-aroma" data-aroma="Santal">¡Elegir Este!</button>
+                    </div>
+                </div>
+
+                <!-- Aroma 3 -->
+                <div class="aroma-card" data-category="florales">
+                    <div class="aroma-image">
+                        <img src="https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=400&h=300&fit=crop" alt="Green Lavender" loading="lazy">
+                    </div>
+                    <div class="aroma-content">
+                        <h3>Green Lavender</h3>
+                        <div class="aroma-tags">
+                            <span class="tag">Floral</span>
+                            <span class="tag">Relajante</span>
+                            <span class="tag">Natural</span>
+                        </div>
+                        <p>Una fragancia floral con notas de lavanda verde que combina frescura y relajación.</p>
+                        <button class="btn-select-aroma" data-aroma="Green Lavender">¡Elegir Este!</button>
+                    </div>
+                </div>
+
+                <!-- Aroma 4 -->
+                <div class="aroma-card" data-category="florales">
+                    <div class="aroma-image">
+                        <img src="https://images.unsplash.com/photo-1582794543139-8ac9cb0f7b11?w=400&h=300&fit=crop" alt="After Eight" loading="lazy">
+                    </div>
+                    <div class="aroma-content">
+                        <h3>After Eight</h3>
+                        <div class="aroma-tags">
+                            <span class="tag">Floral</span>
+                            <span class="tag">Aromático</span>
+                            <span class="tag">Sofisticado</span>
+                        </div>
+                        <p>Una fragancia floral aromática que evoca elegancia y sofisticación nocturna.</p>
+                        <button class="btn-select-aroma" data-aroma="After Eight">¡Elegir Este!</button>
+                    </div>
+                </div>
+
+                <!-- Aroma 5 -->
+                <div class="aroma-card" data-category="florales">
+                    <div class="aroma-image">
+                        <img src="https://images.unsplash.com/photo-1582794543139-8ac9cb0f7b11?w=400&h=300&fit=crop" alt="Starwoods" loading="lazy">
+                    </div>
+                    <div class="aroma-content">
+                        <h3>Starwoods</h3>
+                        <div class="aroma-tags">
+                            <span class="tag">Floral</span>
+                            <span class="tag">Fresco</span>
+                            <span class="tag">Premium</span>
+                        </div>
+                        <p>Una fragancia floral fresca que evoca la calidad y elegancia de los hoteles Starwood.</p>
+                        <button class="btn-select-aroma" data-aroma="Starwoods">¡Elegir Este!</button>
+                    </div>
+                </div>
+
+                <!-- Aroma 6 -->
+                <div class="aroma-card" data-category="amaderados">
+                    <div class="aroma-image">
+                        <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&h=300&fit=crop" alt="Sandalwood" loading="lazy">
+                    </div>
+                    <div class="aroma-content">
+                        <h3>Sandalwood</h3>
+                        <div class="aroma-tags">
+                            <span class="tag">Amaderado</span>
+                            <span class="tag">Clásico</span>
+                            <span class="tag">Meditativo</span>
+                        </div>
+                        <p>Una fragancia amaderada clásica con notas de sándalo que promueve la calma y concentración.</p>
+                        <button class="btn-select-aroma" data-aroma="Sandalwood">¡Elegir Este!</button>
+                    </div>
+                </div>
+
+                <!-- Aroma 7 -->
+                <div class="aroma-card" data-category="citricos">
+                    <div class="aroma-image">
+                        <img src="https://images.unsplash.com/photo-1611080626919-7cf5a9dbab5b?w=400&h=300&fit=crop" alt="Green Tea White" loading="lazy">
+                    </div>
+                    <div class="aroma-content">
+                        <h3>Green Tea White</h3>
+                        <div class="aroma-tags">
+                            <span class="tag">Cítrico</span>
+                            <span class="tag">Floral</span>
+                            <span class="tag">Fresco</span>
+                        </div>
+                        <p>Una fragancia cítrica floral fresca que combina notas de té verde blanco con cítricos.</p>
+                        <button class="btn-select-aroma" data-aroma="Green Tea White">¡Elegir Este!</button>
+                    </div>
+                </div>
+
+                <!-- Aroma 8 -->
+                <div class="aroma-card" data-category="citricos">
+                    <div class="aroma-image">
+                        <img src="https://images.unsplash.com/photo-1611080626919-7cf5a9dbab5b?w=400&h=300&fit=crop" alt="Oriental White" loading="lazy">
+                    </div>
+                    <div class="aroma-content">
+                        <h3>Oriental White</h3>
+                        <div class="aroma-tags">
+                            <span class="tag">Cítrico</span>
+                            <span class="tag">Oriental</span>
+                            <span class="tag">Exótico</span>
+                        </div>
+                        <p>Una fragancia cítrica oriental que combina frescura con notas exóticas y sofisticadas.</p>
+                        <button class="btn-select-aroma" data-aroma="Oriental White">¡Elegir Este!</button>
+                    </div>
+                </div>
+
+                <!-- Aroma 9 -->
+                <div class="aroma-card" data-category="citricos">
+                    <div class="aroma-image">
+                        <img src="https://images.unsplash.com/photo-1611080626919-7cf5a9dbab5b?w=400&h=300&fit=crop" alt="Crushed Lime" loading="lazy">
+                    </div>
+                    <div class="aroma-content">
+                        <h3>Crushed Lime</h3>
+                        <div class="aroma-tags">
+                            <span class="tag">Cítrico</span>
+                            <span class="tag">Ácido</span>
+                            <span class="tag">Energizante</span>
+                        </div>
+                        <p>Una fragancia cítrica intensa con notas de lima triturada que energiza y revitaliza.</p>
+                        <button class="btn-select-aroma" data-aroma="Crushed Lime">¡Elegir Este!</button>
+                    </div>
+                </div>
+
+                <!-- Aroma 10 -->
+                <div class="aroma-card" data-category="citricos">
+                    <div class="aroma-image">
+                        <img src="https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400&h=300&fit=crop" alt="Lime Mint Aqua" loading="lazy">
+                    </div>
+                    <div class="aroma-content">
+                        <h3>Lime Mint Aqua</h3>
+                        <div class="aroma-tags">
+                            <span class="tag">Cítrico</span>
+                            <span class="tag">Aromático</span>
+                            <span class="tag">Refrescante</span>
+                        </div>
+                        <p>Una fragancia cítrica aromática que combina lima, menta y notas acuáticas refrescantes.</p>
+                        <button class="btn-select-aroma" data-aroma="Lime Mint Aqua">¡Elegir Este!</button>
+                    </div>
+                </div>
+
+                <!-- Aroma 11 -->
+                <div class="aroma-card" data-category="citricos">
+                    <div class="aroma-image">
+                        <img src="https://images.unsplash.com/photo-1611080626919-7cf5a9dbab5b?w=400&h=300&fit=crop" alt="Green Tea Lemongrass" loading="lazy">
+                    </div>
+                    <div class="aroma-content">
+                        <h3>Green Tea Lemongrass</h3>
+                        <div class="aroma-tags">
+                            <span class="tag">Cítrico</span>
+                            <span class="tag">Herbal</span>
+                            <span class="tag">Natural</span>
+                        </div>
+                        <p>Una fragancia cítrica herbal que combina té verde con hierba de limón para un aroma natural y refrescante.</p>
+                        <button class="btn-select-aroma" data-aroma="Green Tea Lemongrass">¡Elegir Este!</button>
+                    </div>
+                </div>
+
+                <!-- Aroma 12 -->
+                <div class="aroma-card" data-category="citricos">
+                    <div class="aroma-image">
+                        <img src="https://images.unsplash.com/photo-1611080626919-7cf5a9dbab5b?w=400&h=300&fit=crop" alt="Sencha" loading="lazy">
+                    </div>
+                    <div class="aroma-content">
+                        <h3>Sencha</h3>
+                        <div class="aroma-tags">
+                            <span class="tag">Cítrico</span>
+                            <span class="tag">Floral</span>
+                            <span class="tag">Japonés</span>
+                        </div>
+                        <p>Una fragancia cítrica floral inspirada en el té sencha japonés, elegante y refinada.</p>
+                        <button class="btn-select-aroma" data-aroma="Sencha">¡Elegir Este!</button>
+                    </div>
+                </div>
+
+                <!-- Aroma 13 -->
+                <div class="aroma-card" data-category="citricos">
+                    <div class="aroma-image">
+                        <img src="https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400&h=300&fit=crop" alt="Aqua Lime" loading="lazy">
+                    </div>
+                    <div class="aroma-content">
+                        <h3>Aqua Lime</h3>
+                        <div class="aroma-tags">
+                            <span class="tag">Cítrico</span>
+                            <span class="tag">Acuático</span>
+                            <span class="tag">Fresco</span>
+                        </div>
+                        <p>Una fragancia cítrica acuática que combina lima con notas marinas para un aroma fresco y limpio.</p>
+                        <button class="btn-select-aroma" data-aroma="Aqua Lime">¡Elegir Este!</button>
+                    </div>
+                </div>
+
+                <!-- Aroma 14 -->
+                <div class="aroma-card" data-category="frutales">
+                    <div class="aroma-image">
+                        <img src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=400&h=300&fit=crop" alt="Love and Joy" loading="lazy">
+                    </div>
+                    <div class="aroma-content">
+                        <h3>Love and Joy</h3>
+                        <div class="aroma-tags">
+                            <span class="tag">Frutal</span>
+                            <span class="tag">Cítrico</span>
+                            <span class="tag">Alegre</span>
+                        </div>
+                        <p>Una fragancia frutal cítrica que evoca amor y alegría con notas dulces y vibrantes.</p>
+                        <button class="btn-select-aroma" data-aroma="Love and Joy">¡Elegir Este!</button>
+                    </div>
+                </div>
+
+                <!-- Aroma 15 -->
+                <div class="aroma-card" data-category="frescos">
+                    <div class="aroma-image">
+                        <img src="https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400&h=300&fit=crop" alt="Ocean" loading="lazy">
+                    </div>
+                    <div class="aroma-content">
+                        <h3>Ocean</h3>
+                        <div class="aroma-tags">
+                            <span class="tag">Fresco</span>
+                            <span class="tag">Ozonico</span>
+                            <span class="tag">Marino</span>
+                        </div>
+                        <p>Una fragancia fresca ozónica que evoca la brisa marina y la inmensidad del océano.</p>
+                        <button class="btn-select-aroma" data-aroma="Ocean">¡Elegir Este!</button>
+                    </div>
+                </div>
+
+                <!-- Aroma 16 -->
+                <div class="aroma-card" data-category="frutales">
+                    <div class="aroma-image">
+                        <img src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=400&h=300&fit=crop" alt="Cashmere Fig" loading="lazy">
+                    </div>
+                    <div class="aroma-content">
+                        <h3>Cashmere Fig</h3>
+                        <div class="aroma-tags">
+                            <span class="tag">Frutal</span>
+                            <span class="tag">Amaderado</span>
+                            <span class="tag">Lujoso</span>
+                        </div>
+                        <p>Una fragancia frutal amaderada que combina higo con notas de cachemir para un aroma lujoso y sofisticado.</p>
+                        <button class="btn-select-aroma" data-aroma="Cashmere Fig">¡Elegir Este!</button>
+                    </div>
+                </div>
+
+                <!-- Aroma 17 -->
+                <div class="aroma-card" data-category="citricos">
+                    <div class="aroma-image">
+                        <img src="https://images.unsplash.com/photo-1611080626919-7cf5a9dbab5b?w=400&h=300&fit=crop" alt="Green Tea Ci" loading="lazy">
+                    </div>
+                    <div class="aroma-content">
+                        <h3>Green Tea Ci</h3>
+                        <div class="aroma-tags">
+                            <span class="tag">Cítrico</span>
+                            <span class="tag">Té Verde</span>
+                            <span class="tag">Natural</span>
+                        </div>
+                        <p>Una fragancia cítrica con notas de té verde que combina frescura natural con elegancia.</p>
+                        <button class="btn-select-aroma" data-aroma="Green Tea Ci">¡Elegir Este!</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="aromas-cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2>¿Listo para elegir tu aroma perfecto?</h2>
+                <p>Contáctanos y te ayudaremos a seleccionar el aroma ideal para tu espacio</p>
+                <div class="cta-buttons">
+                    <a href="index.html#precios" class="btn btn-primary">Ver Planes</a>
+                    <a href="index.html#contacto" class="btn btn-secondary">Solicitar Demo</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <img src="images/logos/logo_studio_aroma-cropped.svg" alt="Studio Aroma" class="footer-logo">
+                    <p>Transformando espacios con aromas únicos</p>
+                </div>
+                
+                <div class="footer-links">
+                    <a href="index.html">Inicio</a>
+                    <a href="aromas.html">Aromas</a>
+                    <a href="index.html#precios">Planes</a>
+                    <a href="index.html#contacto">Contacto</a>
+                </div>
+                
+                <div class="footer-social">
+                    <a href="#" class="social-link">
+                        <i class="fab fa-facebook"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 Studio Aroma S.A de C.V. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="aromas.js"></script>
+</body>
+</html>

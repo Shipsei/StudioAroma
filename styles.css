@@ -131,7 +131,7 @@ p {
     display: flex;
     align-items: center;
     background: 
-        linear-gradient(135deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.4) 30%, rgba(0, 0, 0, 0.3) 60%, rgba(0, 0, 0, 0.2) 100%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.6) 30%, rgba(0, 0, 0, 0.4) 60%, rgba(0, 0, 0, 0.2) 100%),
         url('images/fondos/Gemini_Generated_Image_e9taqbe9taqbe9ta.png');
     background-size: cover;
     background-position: center center;
@@ -212,8 +212,6 @@ p {
     max-width: 600px;
     text-align: left;
     grid-column: 2;
-    position: relative;
-    z-index: 10;
 }
 
 .hero-title {
@@ -221,7 +219,6 @@ p {
     font-weight: 700;
     margin-bottom: 1.5rem;
     line-height: 1.1;
-    color: #ffffff;
 }
 
 .highlight {
@@ -233,10 +230,9 @@ p {
 
 .hero-subtitle {
     font-size: 1.25rem;
-    color: #ffffff;
+    color: #cccccc;
     margin-bottom: 2rem;
     line-height: 1.6;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 
 .hero-buttons {
@@ -290,9 +286,8 @@ p {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    color: #ffffff;
+    color: #cccccc;
     font-size: 0.9rem;
-    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
 }
 
 .hero-image {

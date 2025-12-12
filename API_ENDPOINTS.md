@@ -221,3 +221,4 @@ Para verificar que los endpoints funcionan:
 3. Implementar validación en el backend
 4. Configurar notificaciones por email
 5. Configurar base de datos para guardar los datos
+

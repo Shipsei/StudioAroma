@@ -1048,15 +1048,17 @@ class AromaForm {
     displayPlanInfo(planType) {
         const planInfoContainer = document.getElementById('planInfoContainer');
         const planInfoCard = planInfoContainer?.querySelector('.plan-info-card');
+        const planInfoTitle = document.getElementById('planInfoTitle');
         const planInfoDetails = document.getElementById('planInfoDetails');
         
-        if (!planInfoContainer || !planInfoDetails) {
+        if (!planInfoContainer || !planInfoTitle || !planInfoDetails) {
             return;
         }
 
         const planData = this.getPlanData(planType);
         
         if (planData) {
+            planInfoTitle.textContent = planData.title;
             planInfoDetails.innerHTML = planData.details;
             
             // Agregar atributo data-plan para estilos específicos
@@ -1075,7 +1077,11 @@ class AromaForm {
         const plans = {
             'prueba': {
                 title: '',
-                details: `<span class="plan-simple-text">Plan de Prueba: $260 + IVA por 1 mes</span>`
+                details: `
+                    <div class="plan-simple-line">
+                        <span class="plan-simple-text">Plan de Prueba: $260 + IVA por 1 mes • 30 días de prueba • Cobertura CDMX</span>
+                    </div>
+                `
             },
             'individual': {
                 title: 'Plan Individual',

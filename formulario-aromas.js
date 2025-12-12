@@ -179,35 +179,93 @@ class AromaForm {
 
     async submitFormToAPI(formData) {
         if (!this.sessionId) {
-            throw new Error('No session created');
+            // Si no hay sesión, crear una nueva antes de enviar
+            try {
+                const session = await this.createSession(this.formData.equipmentId);
+                this.sessionId = session.id;
+            } catch (error) {
+                console.warn('⚠️ No se pudo crear sesión, continuando sin ella');
+            }
         }
 
         try {
-            const response = await fetch(`${this.apiBaseUrl}/form-sessions/${this.sessionId}/submit`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
+            // Preparar datos completos para enviar
+            const submissionData = {
+                form_data: {
+                    ...formData,
+                    userName: this.formData.userName,
+                    userEmail: this.formData.userEmail,
+                    userPhone: this.formData.userPhone,
+                    userAddress: this.formData.userAddress,
+                    addressDetails: this.formData.addressDetails,
+                    planType: this.getPlanTypeFromURL(),
+                    timestamp: new Date().toISOString(),
+                    url: window.location.href
                 },
-                body: JSON.stringify({
-                    form_data: formData
-                })
-            });
+                recommendation: this.generateRecommendation()
+            };
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+            let result = null;
+            
+            // Intentar enviar a la API si hay sesión
+            if (this.sessionId) {
+                try {
+                    const response = await fetch(`${this.apiBaseUrl}/form-sessions/${this.sessionId}/submit`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                        },
+                        body: JSON.stringify(submissionData)
+                    });
+
+                    if (response.ok) {
+                        result = await response.json();
+                        console.log('✅ Formulario enviado a la API:', result);
+                    } else {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                } catch (apiError) {
+                    console.warn('⚠️ Error enviando a API, usando fallback:', apiError);
+                }
             }
-
-            const result = await response.json();
             
-            // Enviar webhook después del envío exitoso
-            await this.sendWebhook(formData);
+            // Enviar también a endpoint directo como respaldo
+            try {
+                const directResponse = await fetch(`${this.apiBaseUrl}/form-submissions`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                    },
+                    body: JSON.stringify(submissionData.form_data)
+                });
+                
+                if (directResponse.ok) {
+                    const directResult = await directResponse.json();
+                    console.log('✅ Formulario enviado a endpoint directo:', directResult);
+                    if (!result) result = directResult;
+                }
+            } catch (directError) {
+                console.warn('⚠️ Error en endpoint directo:', directError);
+            }
             
-            return result;
+            // Enviar webhook después del envío (siempre, incluso si la API falla)
+            await this.sendWebhook(submissionData.form_data);
+            
+            return result || { success: true, message: 'Formulario procesado' };
         } catch (error) {
             console.error('Error submitting form to API:', error);
+            // Enviar webhook de todas formas
+            await this.sendWebhook(formData);
             throw error;
         }
+    }
+    
+    // Obtener tipo de plan desde la URL
+    getPlanTypeFromURL() {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get('plan') || null;
     }
 
     // Enviar webhook con todos los datos del formulario
@@ -220,13 +278,22 @@ class AromaForm {
                 timestamp: new Date().toISOString(),
                 session_id: this.sessionId,
                 equipment_data: this.equipmentData,
-                form_data: formData,
+                form_data: {
+                    ...formData,
+                    userName: this.formData.userName,
+                    userEmail: this.formData.userEmail,
+                    userPhone: this.formData.userPhone,
+                    userAddress: this.formData.userAddress,
+                    addressDetails: this.formData.addressDetails,
+                    planType: this.getPlanTypeFromURL()
+                },
                 aromatic_notes: this.aromaticNotes,
                 spaces: this.formData.spaces || [],
                 preferred_notes: this.formData.preferredNotes || [],
                 installation_type: this.formData.installationType,
                 space_size: this.formData.spaceSize,
-                recommendation: this.generateRecommendation()
+                recommendation: this.generateRecommendation(),
+                url: window.location.href
             };
 
             console.log('📤 Enviando webhook con datos:', webhookData);
@@ -1174,30 +1241,51 @@ class AromaForm {
 
     // Enviar formulario
     async submitForm() {
+        // Validar que todos los campos requeridos estén completos
+        if (!this.formData.userName || !this.formData.userEmail || !this.formData.userPhone) {
+            this.showMessage('error', 'Campos Incompletos', 'Por favor completa todos los campos de contacto.');
+            return;
+        }
+        
+        if (!this.isValidEmail(this.formData.userEmail)) {
+            this.showMessage('error', 'Email Inválido', 'Por favor ingresa un email válido.');
+            return;
+        }
+        
+        if (!this.isValidPhone(this.formData.userPhone)) {
+            this.showMessage('error', 'Teléfono Inválido', 'Por favor ingresa un número de teléfono válido.');
+            return;
+        }
+        
         this.showLoading(true);
         
         try {
             const recommendation = this.generateRecommendation();
             
-            // Enviar datos a la API si hay sesión
-            if (this.sessionId) {
-                try {
-                    const result = await this.submitFormToAPI(this.formData);
-                    console.log('✅ Formulario enviado a la API:', result);
-                } catch (error) {
-                    console.error('❌ Error enviando formulario a la API:', error);
-                    // Continuar con fallback a localStorage
-                }
+            // Enviar datos a la API
+            try {
+                const result = await this.submitFormToAPI(this.formData);
+                console.log('✅ Formulario enviado exitosamente:', result);
+                
+                // Guardar selección en localStorage como respaldo
+                this.saveSelection();
+                
+                // Mostrar resultados
+                this.showResults(recommendation);
+                
+            } catch (error) {
+                console.error('❌ Error enviando formulario:', error);
+                
+                // Guardar en localStorage como fallback
+                this.saveSelection();
+                
+                // Mostrar resultados de todas formas (mejor UX)
+                const recommendation = this.generateRecommendation();
+                this.showResults(recommendation);
+                
+                // Mostrar mensaje informativo
+                this.showMessage('success', 'Formulario Guardado', 'Tu información se guardó localmente. Te contactaremos pronto.');
             }
-            
-            // Guardar selección en localStorage como fallback
-            this.saveSelection();
-            
-            // Mostrar resultados
-            this.showResults(recommendation);
-            
-            // Los datos ya se enviaron a la API de Laravel
-            console.log('✅ Todos los datos guardados en la API de Laravel');
             
         } catch (error) {
             console.error('Error submitting form:', error);

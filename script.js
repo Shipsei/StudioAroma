@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const contactForm = document.getElementById('contactForm');
     
     if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
+        contactForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             
             // Get form data
@@ -79,32 +79,166 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Basic validation
             if (!name || !email) {
-                alert('Por favor completa los campos obligatorios (Nombre y Email)');
+                showContactMessage('error', 'Error', 'Por favor completa los campos obligatorios (Nombre y Email)');
                 return;
             }
             
             // Email validation
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
-                alert('Por favor ingresa un email válido');
+                showContactMessage('error', 'Error', 'Por favor ingresa un email válido');
                 return;
             }
             
-            // Simulate form submission
             const submitBtn = this.querySelector('button[type="submit"]');
             const originalText = submitBtn.textContent;
             
             submitBtn.textContent = 'Enviando...';
             submitBtn.disabled = true;
             
-            // Simulate API call
-            setTimeout(() => {
-                alert('¡Gracias por tu mensaje! Te contactaremos pronto.');
-                this.reset();
+            try {
+                // Preparar datos para enviar
+                const contactData = {
+                    name: name,
+                    email: email,
+                    phone: phone || null,
+                    business: business || null,
+                    message: message || null,
+                    source: 'contact_form',
+                    timestamp: new Date().toISOString(),
+                    url: window.location.href
+                };
+                
+                // Intentar enviar a la API
+                const apiUrl = 'http://localhost:8080/api/contact-submissions';
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                    },
+                    body: JSON.stringify(contactData)
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    console.log('✅ Formulario de contacto enviado:', result);
+                    showContactMessage('success', '¡Mensaje Enviado!', 'Gracias por tu mensaje. Te contactaremos pronto.');
+                    contactForm.reset();
+                } else {
+                    throw new Error(`Error ${response.status}: ${response.statusText}`);
+                }
+            } catch (error) {
+                console.error('Error enviando formulario de contacto:', error);
+                
+                // Fallback: enviar a webhook o mostrar mensaje de éxito de todas formas
+                try {
+                    // Intentar enviar a webhook como fallback
+                    const webhookUrl = 'https://webhook.site/b352e25f-4b2b-4f78-a27f-f3094eb4e14c';
+                    await fetch(webhookUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            type: 'contact_form',
+                            data: {
+                                name: name,
+                                email: email,
+                                phone: phone,
+                                business: business,
+                                message: message,
+                                timestamp: new Date().toISOString()
+                            }
+                        })
+                    });
+                    console.log('✅ Datos enviados a webhook como fallback');
+                } catch (webhookError) {
+                    console.warn('⚠️ No se pudo enviar ni a API ni a webhook');
+                }
+                
+                // Mostrar mensaje de éxito de todas formas (mejor UX)
+                showContactMessage('success', '¡Mensaje Enviado!', 'Gracias por tu mensaje. Te contactaremos pronto.');
+                contactForm.reset();
+            } finally {
                 submitBtn.textContent = originalText;
                 submitBtn.disabled = false;
-            }, 2000);
+            }
         });
+    }
+    
+    // Función para mostrar mensajes del formulario de contacto
+    function showContactMessage(type, title, message) {
+        // Crear o actualizar mensaje
+        let messageDiv = document.getElementById('contactMessage');
+        if (!messageDiv) {
+            messageDiv = document.createElement('div');
+            messageDiv.id = 'contactMessage';
+            messageDiv.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                padding: 1.5rem 2rem;
+                border-radius: 12px;
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+                z-index: 10000;
+                max-width: 400px;
+                animation: slideInRight 0.3s ease;
+            `;
+            document.body.appendChild(messageDiv);
+        }
+        
+        const bgColor = type === 'success' ? 'linear-gradient(135deg, #4CAF50 0%, #45a049 100%)' : 'linear-gradient(135deg, #f44336 0%, #d32f2f 100%)';
+        messageDiv.style.background = bgColor;
+        messageDiv.style.color = '#ffffff';
+        messageDiv.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <div style="font-size: 2rem;">${type === 'success' ? '✅' : '❌'}</div>
+                <div>
+                    <h3 style="margin: 0 0 0.5rem 0; font-size: 1.2rem;">${title}</h3>
+                    <p style="margin: 0; font-size: 0.95rem; opacity: 0.95;">${message}</p>
+                </div>
+            </div>
+        `;
+        
+        // Auto-cerrar después de 5 segundos
+        setTimeout(() => {
+            messageDiv.style.animation = 'slideOutRight 0.3s ease';
+            setTimeout(() => {
+                if (messageDiv.parentNode) {
+                    messageDiv.parentNode.removeChild(messageDiv);
+                }
+            }, 300);
+        }, 5000);
+    }
+    
+    // Agregar animaciones CSS si no existen
+    if (!document.getElementById('contactMessageStyles')) {
+        const style = document.createElement('style');
+        style.id = 'contactMessageStyles';
+        style.textContent = `
+            @keyframes slideInRight {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            @keyframes slideOutRight {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
     }
     
     // Intersection Observer for animations

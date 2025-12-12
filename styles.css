@@ -1220,11 +1220,11 @@ section {
 
 @media (max-width: 768px) {
     .container {
-        padding: 0 1.5rem;
+        padding: 0 2rem;
     }
     
     .nav-container {
-        padding: 0.8rem 1.5rem;
+        padding: 0.8rem 2rem;
         height: 70px;
     }
     
@@ -1239,8 +1239,8 @@ section {
         background: rgba(0, 0, 0, 0.98);
         backdrop-filter: blur(20px);
         flex-direction: column;
-        padding: 80px 1.5rem 2rem;
-        gap: 1rem;
+        padding: 80px 2rem 2rem;
+        gap: 1.2rem;
         transform: translateX(-100%);
         transition: transform 0.3s ease;
         z-index: 999;
@@ -1279,46 +1279,50 @@ section {
     
     /* Hero Section */
     .hero {
-        padding-top: 90px;
+        padding-top: 100px;
         min-height: auto;
-        padding-bottom: 2rem;
+        padding-bottom: 3rem;
     }
     
     .hero-container {
         grid-template-columns: 1fr;
         text-align: center;
-        gap: 1.5rem;
-        padding: 0 1rem;
+        gap: 2rem;
+        padding: 0 1.5rem;
     }
     
     .hero-title {
         font-size: 2rem;
-        margin-bottom: 1rem;
+        margin-bottom: 1.2rem;
         line-height: 1.2;
+        padding: 0 0.5rem;
     }
     
     .hero-subtitle {
         font-size: 1rem;
-        margin-bottom: 1.5rem;
-        line-height: 1.5;
+        margin-bottom: 2rem;
+        line-height: 1.6;
+        padding: 0 0.5rem;
     }
     
     .hero-buttons {
         flex-direction: column;
         align-items: center;
-        gap: 0.8rem;
-        margin-bottom: 1.5rem;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        padding: 0 1rem;
     }
     
     .hero-badge {
         font-size: 0.85rem;
         justify-content: center;
+        padding: 0 1rem;
     }
     
     .btn {
         width: 100%;
-        max-width: 280px;
-        padding: 0.9rem 1.5rem;
+        max-width: 300px;
+        padding: 1rem 1.8rem;
         font-size: 0.9rem;
     }
     
@@ -1329,59 +1333,63 @@ section {
     .pricing,
     .testimonial,
     .contact {
-        padding: 3rem 0;
+        padding: 4rem 0;
     }
     
     .section-header {
-        margin-bottom: 2rem;
+        margin-bottom: 2.5rem;
+        padding: 0 1rem;
     }
     
     .section-title {
         font-size: 1.8rem;
-        margin-bottom: 0.8rem;
+        margin-bottom: 1rem;
     }
     
     .section-subtitle {
         font-size: 0.95rem;
-        line-height: 1.5;
+        line-height: 1.6;
+        padding: 0 0.5rem;
     }
     
     /* Services */
     .services-grid {
         grid-template-columns: 1fr;
-        gap: 1.2rem;
+        gap: 1.5rem;
+        padding: 0 0.5rem;
     }
     
     .service-card {
-        padding: 1.5rem;
+        padding: 2rem 1.5rem;
     }
     
     .service-icon {
         width: 60px;
         height: 60px;
         font-size: 1.8rem;
-        margin-bottom: 1rem;
+        margin-bottom: 1.2rem;
     }
     
     .service-card h3 {
         font-size: 1.1rem;
-        margin-bottom: 0.8rem;
+        margin-bottom: 1rem;
     }
     
     .service-card p {
         font-size: 0.9rem;
-        line-height: 1.5;
+        line-height: 1.6;
     }
     
     /* Steps */
     .steps-container {
         grid-template-columns: 1fr;
-        gap: 0.8rem;
-        margin: 1.5rem 0;
+        gap: 1rem;
+        margin: 2rem 0;
+        padding: 0 0.5rem;
     }
     
     .step-item {
-        padding: 1rem;
+        padding: 1.5rem 1.2rem;
         text-align: left;
     }
     
@@ -1393,14 +1401,14 @@ section {
         display: flex;
         align-items: center;
         justify-content: flex-start;
-        margin-bottom: 0.8rem;
-        gap: 0.8rem;
+        margin-bottom: 1rem;
+        gap: 1rem;
     }
     
     .step-label {
         margin-bottom: 0;
         font-size: 0.7rem;
-        padding: 0.35rem 0.7rem;
+        padding: 0.4rem 0.8rem;
     }
     
     .step-icon {
@@ -1413,38 +1421,39 @@ section {
     
     .step-content h3 {
         font-size: 1rem;
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.8rem;
         line-height: 1.3;
     }
     
     .step-content p {
         font-size: 0.85rem;
-        line-height: 1.4;
+        line-height: 1.5;
     }
     
     .steps-footer {
-        margin-top: 2rem;
-        padding: 2rem 1rem;
+        margin-top: 2.5rem;
+        padding: 2.5rem 1.5rem;
     }
     
     .steps-footer h3 {
         font-size: 1.3rem;
-        margin-bottom: 0.8rem;
+        margin-bottom: 1rem;
     }
     
     .steps-footer p {
         font-size: 0.9rem;
-        margin-bottom: 1.5rem;
+        margin-bottom: 2rem;
     }
     
     /* Benefits */
     .benefits-grid {
         grid-template-columns: 1fr;
-        gap: 1rem;
+        gap: 1.2rem;
+        padding: 0 0.5rem;
     }
     
     .benefit-item {
-        padding: 1.2rem;
+        padding: 1.5rem 1.2rem;
     }
     
     .benefit-number {
@@ -1460,26 +1469,27 @@ section {
     .benefit-item p {
         font-size: 0.85rem;
         padding-left: 0;
-        margin-top: 0.5rem;
+        margin-top: 0.8rem;
     }
     
     /* Pricing */
     .pricing-grid {
         grid-template-columns: 1fr;
-        gap: 1.2rem;
+        gap: 1.5rem;
+        padding: 0 0.5rem;
     }
     
     .pricing-card {
-        padding: 1.5rem 1.2rem;
+        padding: 2rem 1.5rem;
     }
     
     .pricing-header h3 {
         font-size: 1.2rem;
-        margin-bottom: 1rem;
+        margin-bottom: 1.2rem;
     }
     
     .price {
-        margin-bottom: 1.5rem;
+        margin-bottom: 1.8rem;
     }
     
     .amount {
@@ -1491,12 +1501,12 @@ section {
     }
     
     .pricing-features {
-        margin-bottom: 1.5rem;
+        margin-bottom: 1.8rem;
     }
     
     .feature {
         font-size: 0.9rem;
-        margin-bottom: 0.8rem;
+        margin-bottom: 1rem;
     }
     
     .feature i {
@@ -1507,8 +1517,8 @@ section {
     .plan-requirements,
     .coverage-info {
         font-size: 0.85rem;
-        padding: 0.8rem;
-        margin-bottom: 1rem;
+        padding: 1rem;
+        margin-bottom: 1.2rem;
     }
     
     .pricing-card.featured,
@@ -1523,22 +1533,23 @@ section {
     
     /* Testimonial */
     .testimonial {
-        padding: 2.5rem 0;
+        padding: 3rem 0;
     }
     
     .testimonial-content {
-        padding: 2rem 1rem;
+        padding: 2.5rem 1.5rem;
     }
     
     .quote-icon {
         font-size: 2rem;
-        margin-bottom: 1rem;
+        margin-bottom: 1.2rem;
     }
     
     .testimonial-content blockquote {
         font-size: 1rem;
-        line-height: 1.6;
-        margin-bottom: 1.5rem;
+        line-height: 1.7;
+        margin-bottom: 2rem;
+        padding: 0 0.5rem;
     }
     
     .testimonial-author {
@@ -1548,15 +1559,16 @@ section {
     /* Contact */
     .contact-content {
         grid-template-columns: 1fr;
-        gap: 2rem;
+        gap: 2.5rem;
+        padding: 0 0.5rem;
     }
     
     .contact-info {
-        gap: 1.5rem;
+        gap: 1.8rem;
     }
     
     .contact-item {
-        padding: 1rem;
+        padding: 1.5rem 1.2rem;
     }
     
     .contact-icon {
@@ -1567,7 +1579,7 @@ section {
     
     .contact-details h4 {
         font-size: 1rem;
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.8rem;
     }
     
     .contact-details p {
@@ -1575,12 +1587,12 @@ section {
     }
     
     .contact-form {
-        gap: 1rem;
+        gap: 1.2rem;
     }
     
     .form-group input,
     .form-group textarea {
-        padding: 0.9rem;
+        padding: 1rem;
         font-size: 0.9rem;
     }
     
@@ -1643,48 +1655,52 @@ section {
 
 @media (max-width: 480px) {
     .container {
-        padding: 0 1rem;
+        padding: 0 1.5rem;
     }
     
     .nav-container {
-        padding: 0.7rem 1rem;
+        padding: 0.7rem 1.5rem;
         height: 65px;
     }
     
     .nav-menu {
         top: 0;
-        padding: 75px 1rem 1.5rem;
+        padding: 75px 1.5rem 1.5rem;
+        gap: 1rem;
     }
     
     /* Hero */
     .hero {
-        padding-top: 85px;
-        padding-bottom: 1.5rem;
+        padding-top: 90px;
+        padding-bottom: 2.5rem;
     }
     
     .hero-container {
-        padding: 0 0.5rem;
-        gap: 1.2rem;
+        padding: 0 1rem;
+        gap: 1.5rem;
     }
     
     .hero-title {
         font-size: 1.75rem;
-        margin-bottom: 0.8rem;
+        margin-bottom: 1rem;
+        padding: 0 0.5rem;
     }
     
     .hero-subtitle {
         font-size: 0.95rem;
-        margin-bottom: 1.2rem;
+        margin-bottom: 1.8rem;
+        padding: 0 0.5rem;
     }
     
     .hero-buttons {
-        gap: 0.7rem;
-        margin-bottom: 1.2rem;
+        gap: 0.8rem;
+        margin-bottom: 1.8rem;
+        padding: 0 0.5rem;
     }
     
     .btn {
         max-width: 100%;
-        padding: 0.85rem 1.2rem;
+        padding: 0.95rem 1.5rem;
         font-size: 0.85rem;
     }
     
@@ -1692,6 +1708,7 @@ section {
         font-size: 0.8rem;
         flex-wrap: wrap;
         text-align: center;
+        padding: 0 0.5rem;
     }
     
     /* Sections */
@@ -1701,20 +1718,22 @@ section {
     .pricing,
     .testimonial,
     .contact {
-        padding: 2.5rem 0;
+        padding: 3rem 0;
     }
     
     .section-header {
-        margin-bottom: 1.5rem;
+        margin-bottom: 2rem;
+        padding: 0 0.5rem;
     }
     
     .section-title {
         font-size: 1.5rem;
-        margin-bottom: 0.6rem;
+        margin-bottom: 0.8rem;
     }
     
     .section-subtitle {
         font-size: 0.9rem;
+        padding: 0 0.5rem;
     }
     
     /* Services */

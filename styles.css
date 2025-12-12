@@ -131,10 +131,10 @@ p {
     display: flex;
     align-items: center;
     background: 
-        linear-gradient(135deg, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.8) 50%, rgba(0, 0, 0, 0.4) 80%, rgba(0, 0, 0, 0.1) 100%),
-        url('images/difusor_A1000/5.jpg');
-    background-size: 65% auto;
-    background-position: right center;
+        linear-gradient(135deg, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.6) 30%, rgba(0, 0, 0, 0.4) 60%, rgba(0, 0, 0, 0.2) 100%),
+        url('images/fondos/Gemini_Generated_Image_e9taqbe9taqbe9ta.png');
+    background-size: cover;
+    background-position: center center;
     background-repeat: no-repeat;
     background-attachment: fixed;
     position: relative;
@@ -2068,10 +2068,10 @@ section {
     
     .hero {
         background-attachment: scroll;
-        background-size: 75% auto;
-        background-position: right center;
+        background-size: cover;
+        background-position: center center;
         padding-top: 100px;
-        min-height: auto;
+        min-height: 60vh;
         margin-top: 0;
     }
     
